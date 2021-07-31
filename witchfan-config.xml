@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="game-config.xsd">
+	
+	<properties>
+		<property name="gameSessionUpdateDelay" value="25"/>
+		<property name="levelSetFileName" value="data/WitchFantasyLevelSet.xml"/>
+	</properties>
+	
+	<class role="environment" classname="io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment"/>
+	<class role="level" classname="io.github.purpleloop.game.witchfantasy.model.WitchFantasyGameLevel"/>
+	<class role="view" classname="io.github.purpleloop.game.witchfantasy.gui.WitchFantasyView"/>
+	<class role="session" classname="io.github.purpleloop.game.witchfantasy.model.WitchFantasySession"/>
+	<class role="level_provider" classname="io.github.purpleloop.gameengine.action.model.level.PredefinedLevelSet"/>
+	<class role="controller" classname="io.github.purpleloop.gameengine.action.gui.keyboard.KeyboardController"/>
+	
+	<keymap key="Space" action="mainAction"/>	
+	<keymap key="Up" action="up"/>
+	<keymap key="Down" action="down"/>
+	<keymap key="Left" action="left"/>
+	<keymap key="Right" action="right"/>
+		
+	<!--<image name="sprites" location="sprites.gif"/>-->
+	
+    <!--<sound name="sound1" location="sound1.wav"/>-->
+	
+</config>

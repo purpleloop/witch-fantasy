@@ -42,13 +42,12 @@
 	</build>
 
 	<dependencies>
-
+	
 		<dependency>
-			<groupId>io.github.purpleloop</groupId>
-			<artifactId>purple-commons-swing</artifactId>
+			<groupId>io.github.purpleloop.gameengine</groupId>
+			<artifactId>game-engine-action-swing</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-
+		</dependency>	
 		<!-- Logging -->
 
 		<dependency>
