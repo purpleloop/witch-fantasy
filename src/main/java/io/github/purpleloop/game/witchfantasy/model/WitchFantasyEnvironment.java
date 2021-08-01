@@ -1,24 +1,35 @@
 package io.github.purpleloop.game.witchfantasy.model;
 
-import io.github.purpleloop.gameengine.action.model.environment.AbstractObjectEnvironment;
-import io.github.purpleloop.gameengine.action.model.interfaces.IAgent;
+import io.github.purpleloop.gameengine.action.model.environment.AbstractCellObjectEnvironment;
+import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
 import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
 import io.github.purpleloop.gameengine.action.model.level.IGameLevel;
+import io.github.purpleloop.gameengine.core.util.EngineException;
 
-public class WitchFantasyEnvironment extends AbstractObjectEnvironment {
+/** The Witch-Fantasy environment is based on a 2D cell object environment. */
+public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
-	public WitchFantasyEnvironment(ISession session, IGameLevel level) {
-		super(session);
+	/** Constructor.
+	 * @param session the game session
+	 * @param level the game level
+	 */
+	public WitchFantasyEnvironment(ISession session, IGameLevel level) throws EngineException {
+		super(session, level);
 	}
 
 	@Override
-	public void dumpEnvironmentObjects() {		
+	protected void initFromGameLevel() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	protected IAgent spawnAgentRandomly(String name) {
-		// FIXME Should not be mandatory
-		return null;
+	public boolean isObjectAllowedAtCell(IEnvironmentObjet objetTeste, int x, int y) {
+		return true;
+	}
+
+	@Override
+	public void reachingCell(IEnvironmentObjet objet, int x, int y) {
+		// TODO Auto-generated method stub
 	}
 	
 }

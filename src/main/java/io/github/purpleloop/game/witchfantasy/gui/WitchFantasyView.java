@@ -8,8 +8,14 @@ import io.github.purpleloop.gameengine.action.gui.GamePanel;
 import io.github.purpleloop.gameengine.core.config.GameConfig;
 import io.github.purpleloop.gameengine.core.config.IDataFileProvider;
 
+/** The game view. */
 public class WitchFantasyView extends BaseGameView {
 
+	/** Constructor of the view.
+	 * @param conf             the game configuration
+	 * @param dataFileProvider the data file provider
+	 * @param owner            the owning game panel
+	 */
 	public WitchFantasyView(GameConfig conf, IDataFileProvider dataFileProvider, GamePanel owner) {
 		super(owner, conf);
 	}
@@ -22,10 +28,10 @@ public class WitchFantasyView extends BaseGameView {
 	@Override
 	protected void paintView(Graphics g) {
 
-        if (getSessionCourante() == null) {            
-    		listControls(g);
-        } 
-		
+		if (getSessionCourante() == null) {
+			listControls(g);
+		}
+
 	}
 
 }

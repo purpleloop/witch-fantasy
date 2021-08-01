@@ -6,6 +6,8 @@
 	<properties>
 		<property name="gameSessionUpdateDelay" value="25"/>
 		<property name="levelSetFileName" value="data/WitchFantasyLevelSet.xml"/>
+        <property name="environment.cellSize" value="40" />
+        <property name="environment.maxAgents" value="50" />
 	</properties>
 	
 	<class role="environment" classname="io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment"/>
