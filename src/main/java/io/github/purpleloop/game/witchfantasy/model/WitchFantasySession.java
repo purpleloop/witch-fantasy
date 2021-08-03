@@ -8,7 +8,12 @@ import io.github.purpleloop.gameengine.core.util.EngineException;
 /** The game session. */
 public class WitchFantasySession extends BaseAbstractSession {
 
-	/** Constructor of the session.
+	/** Is the session finished ? */
+	protected boolean finished = false;
+
+	/**
+	 * Constructor of the session.
+	 * 
 	 * @param gameEngine the game engine
 	 */
 	public WitchFantasySession(IGameEngine gameEngine) throws EngineException {
@@ -16,12 +21,18 @@ public class WitchFantasySession extends BaseAbstractSession {
 	}
 
 	@Override
-	public boolean isEnded() {
-		return false;
+	public void initSession() {
+		finished = false;
+		addPlayer(new WitchFantasyPlayer());
 	}
 
 	@Override
-	public void environmentChanged(IGameEvent event) {		
+	public boolean isEnded() {
+		return finished;
+	}
+
+	@Override
+	public void environmentChanged(IGameEvent event) {
 	}
 
 }

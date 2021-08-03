@@ -23,7 +23,7 @@
 	<keymap key="Left" action="left"/>
 	<keymap key="Right" action="right"/>
 		
-	<!--<image name="sprites" location="sprites.gif"/>-->
+	<image name="sprites" location="witch-fantasy-sprites.gif"/>
 	
     <!--<sound name="sound1" location="sound1.wav"/>-->
 	
