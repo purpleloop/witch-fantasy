@@ -8,10 +8,10 @@ import org.w3c.dom.Element;
 
 import io.github.purpleloop.commons.xml.XMLTools;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
-import io.github.purpleloop.gameengine.action.model.level.XMLGameLevel;
+import io.github.purpleloop.gameengine.action.model.level.XmlGameLevel;
 
 /** Models a Witch-Fantasy level. */
-public class WitchFantasyGameLevel implements XMLGameLevel {
+public class WitchFantasyGameLevel implements XmlGameLevel {
 
 	/** Logger of the class. */
 	private static final Log LOG = LogFactory.getLog(WitchFantasyGameLevel.class);
@@ -26,7 +26,7 @@ public class WitchFantasyGameLevel implements XMLGameLevel {
 	private WitchFantasyMapContents[][] storage;
 
 	@Override
-	public void loadFromXML(Element levelElement) throws Exception {
+	public void loadFromXml(Element levelElement) throws Exception {
 
 		String name = levelElement.getAttribute("name");
 
