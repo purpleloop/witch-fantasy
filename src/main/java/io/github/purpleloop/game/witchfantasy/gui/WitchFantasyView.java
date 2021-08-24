@@ -63,10 +63,10 @@ public class WitchFantasyView extends BaseGameView {
 	/** Should we draw bounding box rectangles ? */
 	private boolean drawBoundingBox = true;
 
-	/** X view offset. */
+	/** X view offset (for scrolling). */
 	private int viewX;
 
-	/** Y view offset. */
+	/** Y view offset (for scrolling). */
 	private int viewY;
 
 	/**
@@ -125,28 +125,38 @@ public class WitchFantasyView extends BaseGameView {
 			WitchFantasyEnvironment currentEnv = (WitchFantasyEnvironment) currentSession.getCurrentEnvironment();
 
 			if (currentEnv != null) {
-				PlayableCharacterAgent ag = (PlayableCharacterAgent) currentEnv.getControllable();
 
-				int axLoc = ag.getXLoc();
-				int ayLoc = ag.getYLoc();
-
-				if (axLoc > X_SCROLLING_START) {
-					viewX = axLoc - X_SCROLLING_START;
-				} else {
-					viewX = 0;
-				}
-
-				if (ayLoc > Y_SCROLLING_START) {
-					viewY = ayLoc - Y_SCROLLING_START;
-				} else {
-					viewY = 0;
-				}
-
+				shiftViewOriginForAgent((PlayableCharacterAgent) currentEnv.getControllable());
 				paintTilesLayer(g2, currentEnv);
 				paintObjects(g2, currentEnv);
 			}
 
 		} // if currentSession
+	}
+
+	/**
+	 * Adjust the view origin according to the location of the given agent.
+	 * 
+	 * @param agent the agent used to adjust the view for scrolling
+	 */
+	private void shiftViewOriginForAgent(PlayableCharacterAgent agent) {
+		this.viewX = shiftIfAbove(agent.getXLoc(), X_SCROLLING_START);
+		this.viewY = shiftIfAbove(agent.getYLoc(), Y_SCROLLING_START);
+	}
+
+	/**
+	 * Shift to apply if value is over a given limit.
+	 * 
+	 * @param value the value
+	 * @param limit the limit
+	 * @return the shift if necessary
+	 */
+	private int shiftIfAbove(int value, int limit) {
+		if (value <= limit) {
+			return 0;
+		} else {
+			return value - limit;
+		}
 	}
 
 	/**
@@ -296,7 +306,7 @@ public class WitchFantasyView extends BaseGameView {
 						Rectangle r3 = otherCollisionRect.intersection(refCollisionRect);
 
 						if (!r3.isEmpty()) {
-							r3.translate(-viewX, -viewY);							
+							r3.translate(-viewX, -viewY);
 							graphics2d.setColor(Color.RED);
 							graphics2d.fill(r3);
 						}
@@ -312,7 +322,7 @@ public class WitchFantasyView extends BaseGameView {
 
 			Rectangle r = objectToPaint.getCollisionRectangle();
 			Rectangle translatedRectangle = (Rectangle) r.clone();
-			translatedRectangle.translate(-viewX, -viewY);		
+			translatedRectangle.translate(-viewX, -viewY);
 			graphics2d.setColor(Color.BLACK);
 			graphics2d.draw(translatedRectangle);
 		}

@@ -55,7 +55,7 @@ public class WitchFantasyObject extends GameObject {
 		}
 	}
 
-	/** @return the animation sequence index */
+	@Override
 	public int getAnimationSequence() {
 		return animationSequence;
 	}
@@ -187,7 +187,7 @@ public class WitchFantasyObject extends GameObject {
 
 	}
 
-	/** @return the object's collision rectangle */
+	@Override
 	public Rectangle getCollisionRectangle() {
 		return collisionRectangle;
 	}

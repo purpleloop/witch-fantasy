@@ -2,22 +2,22 @@
 <levels>
     <level height="18" name="1" width="24">
         <line>########################</line>
-        <line>#+                     #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
-        <line>#                      #</line>
+        <line>#+  #######C   ##    ###</line>
+        <line>#    ####     ##      ##</line>
+        <line>##   ###     ##      ###</line>
+        <line>##  ####     ###   #####</line>
+        <line>#     ####         #####</line>
+        <line>##    ###        ###  C#</line>
+        <line>##   #     #    ###   ##</line>
+        <line>#    #   ##      #   ###</line>
+        <line>#       ###         # ##</line>
+        <line>##     #####     ##    #</line>
+        <line>##       #####    ####K#</line>
+        <line>####    ###          ###</line>
+        <line>##     ###          ####</line>
+        <line>###   ##     #       ###</line>
+        <line>##   ###   ###       ###</line>
+        <line>###  ##F  ###      #####</line>
         <line>########################</line>
     </level>
 </levels>

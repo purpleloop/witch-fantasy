@@ -9,11 +9,12 @@ import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyPlayer;
 import io.github.purpleloop.gameengine.action.model.actions.IActionStore;
 import io.github.purpleloop.gameengine.action.model.actions.SimpleActionStore;
+import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 import io.github.purpleloop.gameengine.action.model.interfaces.IControllableAgent;
 import io.github.purpleloop.gameengine.action.model.interfaces.IController;
 
 /** Models a Witch Fantasy playable (controlled) agent. */
-public class PlayableCharacterAgent extends WitchFantasyAgent implements IControllableAgent {
+public class PlayableCharacterAgent extends WitchFantasyAgent implements IControllableAgent, Carrier {
 
 	/** Speed factor : one tenth of cell size - empirical value. */
 	private static final int SPEED_FACTOR = 10;
@@ -38,7 +39,7 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 
 	/** The agent's action store (memory of what the agent is going to do). */
 	private SimpleActionStore actionStore;
-
+	
 	/**
 	 * Creates a playable character agent.
 	 * 
@@ -129,6 +130,26 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 		}
 
 		return orientation;
+	}
+
+	@Override
+	public boolean carries(ICellContents object) {
+		return player.carries(object);
+	}
+
+	@Override
+	public boolean drop(ICellContents object) {
+		return player.drop(object);
+	}
+
+	@Override
+	public void grab(ICellContents object) {
+		player.grab(object);
+	}
+
+	@Override
+	public Inventory getInventory() {
+		return player.getInventory();
 	}
 
 }

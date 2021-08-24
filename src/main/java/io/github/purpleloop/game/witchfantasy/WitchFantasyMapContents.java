@@ -14,6 +14,15 @@ public enum WitchFantasyMapContents implements ICellContents {
 	 */
 	BLOCK('#'),
 
+	/** A chest. */
+	CHEST('C'),
+
+	/** A fountain. */
+	FOUNTAIN('F'),
+
+	/** A key. */
+	KEY('K'),
+	
 	/** The start place where to . */
 	START_PLACE('+');
 

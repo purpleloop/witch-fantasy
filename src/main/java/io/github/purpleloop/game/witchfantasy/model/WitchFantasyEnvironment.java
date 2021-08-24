@@ -76,8 +76,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 		WitchFantasyMapContents cellContentsCode = (WitchFantasyMapContents) getCellContents(x, y);
 
 		if (testedObject instanceof IAgent) {
-			// No agent can go through a block
-			if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
+			// No agent can go through a block or a fountain
+			if (cellContentsCode == WitchFantasyMapContents.BLOCK
+					|| cellContentsCode == WitchFantasyMapContents.FOUNTAIN) {
 				return false;
 			}
 		}
@@ -86,8 +87,29 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 	}
 
 	@Override
-	public void reachingCell(IEnvironmentObjet objet, int x, int y) {
-		// Nothing specific yet
+	public void reachingCell(IEnvironmentObjet object, int x, int y) {
+
+		WitchFantasyMapContents cellContents = (WitchFantasyMapContents) getCellContents(x, y);
+
+		if (object instanceof PlayableCharacterAgent) {
+
+			PlayableCharacterAgent playableCharacteAgent = (PlayableCharacterAgent) object;
+
+			switch (cellContents) {
+
+			case CHEST:
+				// Nothing for the moment
+				break;
+
+			case KEY:
+				// The agent grabs the key
+				playableCharacteAgent.grab(WitchFantasyMapContents.KEY);
+				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
+				break;
+			default:
+			}
+		}
+
 	}
 
 	/**
