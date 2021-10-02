@@ -83,6 +83,10 @@ public class WitchFantasyObject extends GameObject {
 	/** Make the object move in the environment space according to it's speed. */
 	public void move() {
 
+		if (speed == 0) {
+			return;
+		}
+
 		int ug = envionment.getCellSize();
 
 		// Compute new coordinates of the object
