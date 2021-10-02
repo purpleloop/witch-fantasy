@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<levels>
-    <level height="18" name="1" width="24">
+<levels start="1">
+
+    <level height="18" id="1" width="24">
         <line>########################</line>
         <line>#+  #######C   ##    ###</line>
         <line>#    ####     ##      ##</line>
@@ -19,5 +20,27 @@
         <line>##   ###   ###       ###</line>
         <line>###  ##F  ###      #####</line>
         <line>########################</line>
+        <link nextLevel="2" />
     </level>
+    <level height="18" id="2" width="24">
+        <line>########################</line>
+        <line>#+                     #</line>
+        <line># # ################## #</line>
+        <line># #                  # #</line>
+        <line># #                  # #</line>
+        <line># #                  # #</line>
+        <line># ###############    # #</line>
+        <line># #   C              # #</line>
+        <line># #          C       # #</line>
+        <line># #   ################ #</line>
+        <line># #                 K# #</line>
+        <line># #              ##### #</line>
+        <line># #              #   # #</line>
+        <line># # ############## # # #</line>
+        <line># #                # # #</line>
+        <line># ################## # #</line>
+        <line>#                    #F#</line>
+        <line>########################</line>
+        <link nextLevel="1" />
+    </level>    
 </levels>

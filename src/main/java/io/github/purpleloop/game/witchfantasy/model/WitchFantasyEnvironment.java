@@ -76,9 +76,8 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 		WitchFantasyMapContents cellContentsCode = (WitchFantasyMapContents) getCellContents(x, y);
 
 		if (testedObject instanceof IAgent) {
-			// No agent can go through a block or a fountain
-			if (cellContentsCode == WitchFantasyMapContents.BLOCK
-					|| cellContentsCode == WitchFantasyMapContents.FOUNTAIN) {
+			// No agent can go through a block
+			if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
 				return false;
 			}
 		}
@@ -106,6 +105,12 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 				playableCharacteAgent.grab(WitchFantasyMapContents.KEY);
 				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
 				break;
+
+			case FOUNTAIN:
+				// The agent reached the exit of the current level
+				fireEnvironmentChanged(new WitchFantasyEvent(WitchFantasyEvent.EXIT_REACHED));
+				break;
+
 			default:
 			}
 		}

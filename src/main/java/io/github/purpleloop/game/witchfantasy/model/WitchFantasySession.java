@@ -33,6 +33,20 @@ public class WitchFantasySession extends BaseAbstractSession {
 
 	@Override
 	public void environmentChanged(IGameEvent event) {
+
+        if (event instanceof WitchFantasyEvent) {
+        	WitchFantasyEvent gEvent = (WitchFantasyEvent) event;
+            int code = gEvent.getCode();
+
+            switch (code) {
+            case WitchFantasyEvent.EXIT_REACHED:
+                prepareLevelChange();
+                break;        
+            default:
+                LOG.debug("Dropping unmanaged event code=" + code);
+            }
+
+        }
 	}
 
 }

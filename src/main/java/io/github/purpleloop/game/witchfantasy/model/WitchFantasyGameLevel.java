@@ -16,6 +16,9 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 	/** Logger of the class. */
 	private static final Log LOG = LogFactory.getLog(WitchFantasyGameLevel.class);
 
+	/** The level id. */
+	private String id;
+
 	/** The level width. */
 	private int width;
 
@@ -25,12 +28,15 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 	/** The storage of the map contents. */
 	private WitchFantasyMapContents[][] storage;
 
+	/** Next level id. */
+	private String nextLevel;
+
 	@Override
 	public void loadFromXml(Element levelElement) throws Exception {
 
-		String name = levelElement.getAttribute("name");
+		this.id = levelElement.getAttribute("id");
 
-		LOG.debug("Loading data for level " + name);
+		LOG.debug("Loading data for level " + id);
 
 		width = Integer.parseInt(levelElement.getAttribute("width"));
 		height = Integer.parseInt(levelElement.getAttribute("height"));
@@ -57,11 +63,24 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 			y++;
 		}
 
+        Element linkElemnet = XMLTools.getUniqueChildElement(levelElement, "link").get();
+        nextLevel = linkElemnet.getAttribute("nextLevel");
+
 	}
 
 	/** @return the map contents storage */
 	public WitchFantasyMapContents[][] getStorage() {
 		return storage;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public String getNextLevel() {
+		return nextLevel;
 	}
 
 	/** @return width of the map */
