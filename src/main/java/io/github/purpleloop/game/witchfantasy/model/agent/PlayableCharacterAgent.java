@@ -4,6 +4,7 @@ import java.util.Set;
 
 import io.github.purpleloop.commons.direction.Direction;
 import io.github.purpleloop.commons.direction.Direction8;
+import io.github.purpleloop.game.witchfantasy.model.WitchAppearance;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyAgent;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyPlayer;
@@ -12,6 +13,7 @@ import io.github.purpleloop.gameengine.action.model.actions.SimpleActionStore;
 import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 import io.github.purpleloop.gameengine.action.model.interfaces.IControllableAgent;
 import io.github.purpleloop.gameengine.action.model.interfaces.IController;
+import io.github.purpleloop.gameengine.action.model.objects.IAppearance;
 
 /** Models a Witch Fantasy playable (controlled) agent. */
 public class PlayableCharacterAgent extends WitchFantasyAgent implements IControllableAgent, Carrier {
@@ -39,7 +41,10 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 
 	/** The agent's action store (memory of what the agent is going to do). */
 	private SimpleActionStore actionStore;
-	
+
+	/** The witch appearance. */
+	private WitchAppearance appearance;
+
 	/**
 	 * Creates a playable character agent.
 	 * 
@@ -51,6 +56,7 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 		this.controller = null;
 		this.actionStore = new SimpleActionStore();
 		this.player = player;
+		this.appearance = WitchAppearance.NORMAL;
 	}
 
 	/** @return the player that controls this agent */
@@ -150,6 +156,21 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 	@Override
 	public Inventory getInventory() {
 		return player.getInventory();
+	}
+
+	/** @return the character appearance */
+	public IAppearance getAppearance() {
+		return appearance;
+	}
+
+	/** @param appearance the character appearance */
+	public void setAppearance(WitchAppearance appearance) {
+		this.appearance = appearance;
+	}
+
+	@Override
+	public String getName() {
+		return appearance.getName();
 	}
 
 }

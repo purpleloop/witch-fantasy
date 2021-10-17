@@ -2,6 +2,9 @@ package io.github.purpleloop.game.witchfantasy.model;
 
 import java.util.Optional;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import io.github.purpleloop.commons.direction.Direction4;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyException;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
@@ -16,7 +19,10 @@ import io.github.purpleloop.gameengine.core.util.Location;
 
 /** The Witch-Fantasy environment is based on a 2D cell object environment. */
 public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
-
+	
+	/** Logger of the class. */
+	private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
+	
 	/**
 	 * Constructor of the environment.
 	 * 
@@ -92,17 +98,28 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
 		if (object instanceof PlayableCharacterAgent) {
 
-			PlayableCharacterAgent playableCharacteAgent = (PlayableCharacterAgent) object;
+			PlayableCharacterAgent playableCharacterAgent = (PlayableCharacterAgent) object;
 
 			switch (cellContents) {
 
 			case CHEST:
-				// Nothing for the moment
+				// Wow change appearance test
+				
+				LOG.debug("Change appaearance");
+
+				if (playableCharacterAgent.getAppearance() == WitchAppearance.NORMAL) {
+					playableCharacterAgent.setAppearance(WitchAppearance.SPIDER);
+				} else {
+					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
+				}
+				
+				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
+
 				break;
 
 			case KEY:
 				// The agent grabs the key
-				playableCharacteAgent.grab(WitchFantasyMapContents.KEY);
+				playableCharacterAgent.grab(WitchFantasyMapContents.KEY);
 				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
 				break;
 

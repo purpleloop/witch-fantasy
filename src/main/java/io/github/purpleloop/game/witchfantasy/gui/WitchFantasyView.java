@@ -108,6 +108,8 @@ public class WitchFantasyView extends BaseGameView {
 		for (int o = 0; o < 4; o++) {
 			spriteDesc.add(new Sprite("witch0" + o, UG * o, UG, UG, UG));
 			spriteDesc.add(new Sprite("witch1" + o, UG * o, UG * 2, UG, UG));
+			spriteDesc.add(new Sprite("spider0" + o, UG * o, UG + 2 * UG, UG, UG));
+			spriteDesc.add(new Sprite("spider1" + o, UG * o, UG * 2 + 2 * UG, UG, UG));
 		} // for -- direction
 		return spriteDesc;
 	}
@@ -216,7 +218,7 @@ public class WitchFantasyView extends BaseGameView {
 				objectOrientation = 0;
 			}
 
-			putSprite(graphics2d, objectToPaint.getName() + objectToPaint.getAnimationSequence() + objectOrientation, x,
+			putSprite(graphics2d, objectToPaint.getAppearance().getName() + objectToPaint.getAnimationSequence() + objectOrientation, x,
 					y);
 
 			if (isDebugInfo()) {
@@ -284,10 +286,12 @@ public class WitchFantasyView extends BaseGameView {
 		sb.append(specificObject.getXLoc());
 		sb.append(",");
 		sb.append(specificObject.getYLoc());
-		sb.append(" speed=");
+		sb.append(", speed=");
 		sb.append(specificObject.getSpeed());
-		sb.append(" ori=");
+		sb.append(", ori=");
 		sb.append(specificObject.getOrientation());
+		sb.append(", appearance=");
+		sb.append(objectToPaint.getAppearance());
 
 		graphics2d.drawString(sb.toString(), x, y);
 
