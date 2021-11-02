@@ -6,36 +6,45 @@ import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 public enum WitchFantasyMapContents implements ICellContents {
 
 	/** An empty space or passage. */
-	EMPTY(' '),
+	EMPTY(' ', true),
 
 	/**
 	 * A block that cannot be passed over (dense trees, strong wood fence, stone or
 	 * brick wall, stone rock).
 	 */
-	BLOCK('#'),
+	BLOCK('#', true),
 
 	/** A chest. */
-	CHEST('C'),
+	CHEST('C', false),
 
 	/** A fountain. */
-	FOUNTAIN('F'),
+	FOUNTAIN('F', false),
 
 	/** A key. */
-	KEY('K'),
-	
+	KEY('K', false),
+
 	/** The start place where to . */
-	START_PLACE('+');
+	START_PLACE('+', false);
 
 	/** The char used to represent the contents in text files. */
 	private char code;
 
 	/**
+	 * True if the map contents has an adaptive appearance through the seasons,
+	 * false otherwise.
+	 */
+	private boolean seasonal;
+
+	/**
 	 * Private constructor for map contents.
 	 * 
-	 * @param code character code used in map descriptor
+	 * @param code     character code used in map descriptor
+	 * @param seasonal if the map contents has an adaptive appearance through the
+	 *                 seasons, false otherwise
 	 */
-	WitchFantasyMapContents(char code) {
+	WitchFantasyMapContents(char code, boolean seasonal) {
 		this.code = code;
+		this.seasonal = seasonal;
 	}
 
 	/**
@@ -60,6 +69,14 @@ public enum WitchFantasyMapContents implements ICellContents {
 			}
 		}
 		throw new WitchFantasyException("Unsupported character " + code + ".");
+	}
+
+	/**
+	 * @return true if the map contents has an adaptive appearance through the
+	 *         seasons, false otherwise.
+	 */
+	public boolean isSeasonal() {
+		return seasonal;
 	}
 
 }

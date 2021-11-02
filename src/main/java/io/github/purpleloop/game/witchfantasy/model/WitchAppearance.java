@@ -5,9 +5,12 @@ import io.github.purpleloop.gameengine.action.model.objects.IAppearance;
 /** Witch appearances. */
 public enum WitchAppearance implements IAppearance {
 
-	/** Normal appearance, as a witch. */
-	NORMAL("witch"),
+	/** Start appearance, as an apprentice. */
+	APPRENTICE("apprentice"),
 
+	/** Appearance, as a witch. */
+	WITCH("witch"),	
+	
 	/** Familiar appearance, as a black spider. */
 	SPIDER("spider");
 

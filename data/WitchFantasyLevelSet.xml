@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <levels start="1">
-
-    <level height="18" id="1" width="24">
+    <level height="18" id="1" width="24" season="SPRING">
+        <line>########################</line>
+        <line>#+     #             ###</line>
+        <line>#       #             ##</line>
+        <line>##    ##             ###</line>
+        <line>##           ###     ###</line>
+        <line>#     ####         #####</line>
+        <line>##                ###  #</line>
+        <line>##   #C    #    ###   ##</line>
+        <line>#    #   ##      #   # #</line>
+        <line>#       #           # ##</line>
+        <line>##        ##     ##    #</line>
+        <line>##       #####    #   K#</line>
+        <line>####                 ###</line>
+        <line>##     ###          ####</line>
+        <line>###          #       ###</line>
+        <line>##   #     ###       ###</line>
+        <line>###  ##   ###     F#####</line>
+        <line>########################</line>
+        <link nextLevel="2" />
+    </level>
+    <level height="18" id="2" width="24" season="SUMMER">
         <line>########################</line>
         <line>#+  #######C   ##    ###</line>
         <line>#    ####     ##      ##</line>
@@ -20,27 +40,49 @@
         <line>##   ###   ###       ###</line>
         <line>###  ##F  ###      #####</line>
         <line>########################</line>
-        <link nextLevel="2" />
+        <link nextLevel="3" />
     </level>
-    <level height="18" id="2" width="24">
+    <level height="18" id="3" width="24" season="FALL">
         <line>########################</line>
-        <line>#+                     #</line>
-        <line># # ################## #</line>
-        <line># #                  # #</line>
-        <line># #                  # #</line>
-        <line># #                  # #</line>
-        <line># ###############    # #</line>
-        <line># #   C              # #</line>
-        <line># #          C       # #</line>
-        <line># #   ################ #</line>
+        <line>#+   ### ##  #####     #</line>
+        <line># # ###   #  #####  ## #</line>
+        <line># #   ##           ### #</line>
+        <line># ##   #    #     ## # #</line>
+        <line># ###      #      ##   #</line>
+        <line># #######  ######  # ###</line>
+        <line># #   C   #        #  ##</line>
+        <line># #    #     C     ##  #</line>
+        <line># #   ### ############ #</line>
         <line># #                 K# #</line>
-        <line># #              ##### #</line>
-        <line># #              #   # #</line>
-        <line># # ############## # # #</line>
-        <line># #                # # #</line>
-        <line># ################## # #</line>
+        <line># #    #         ##### #</line>
+        <line># #   ##         #   # #</line>
+        <line># # #######   #### # # #</line>
+        <line># #         #      # # #</line>
+        <line># ####   ########### # #</line>
         <line>#                    #F#</line>
         <line>########################</line>
-        <link nextLevel="1" />
+        <link nextLevel="4" />
     </level>    
+    <level height="18" id="4" width="24" season="WINTER">
+        <line>########################</line>
+        <line>#F#                    #</line>
+        <line># #     #              #</line>
+        <line>#     ##               #</line>
+        <line>####         ###       #</line>
+        <line>#     ##               #</line>
+        <line>##           +    ###  #</line>
+        <line>##   #C    #    ###   ##</line>
+        <line>#    #   #       #   # #</line>
+        <line>#       #           # ##</line>
+        <line>##        #      ##    #</line>
+        <line>##           #    #   K#</line>
+        <line>####                 ###</line>
+        <line>##                     #</line>
+        <line>###          #       ###</line>
+        <line>##   #     ###       ###</line>
+        <line>###  ##   ###     F   ##</line>
+        <line>########################</line>
+        <link nextLevel="1" />
+    </level>
+
 </levels>

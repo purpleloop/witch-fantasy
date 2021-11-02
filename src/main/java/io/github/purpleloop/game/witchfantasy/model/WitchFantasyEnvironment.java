@@ -19,10 +19,18 @@ import io.github.purpleloop.gameengine.core.util.Location;
 
 /** The Witch-Fantasy environment is based on a 2D cell object environment. */
 public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
-	
+
 	/** Logger of the class. */
 	private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
-	
+
+	/**
+	 * The current game level.
+	 * 
+	 * TODO Maybe move this game environment-level link up in the class hierarchy ?
+	 * It seems useful ...
+	 */
+	private WitchFantasyGameLevel witchFantasyGameLevel;
+
 	/**
 	 * Constructor of the environment.
 	 * 
@@ -61,7 +69,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
 	@Override
 	protected void initFromGameLevel() {
-		WitchFantasyGameLevel witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
+		this.witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
 
 		WitchFantasyMapContents[][] gameLevelStorage = witchFantasyGameLevel.getStorage();
 
@@ -74,6 +82,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 				this.setCellContents(x, y, gameLevelStorage[x][y]);
 			}
 		}
+
 	}
 
 	@Override
@@ -82,10 +91,12 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 		WitchFantasyMapContents cellContentsCode = (WitchFantasyMapContents) getCellContents(x, y);
 
 		if (testedObject instanceof IAgent) {
+
 			// No agent can go through a block
 			if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
 				return false;
 			}
+
 		}
 
 		return true;
@@ -104,15 +115,17 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
 			case CHEST:
 				// Wow change appearance test
-				
+
 				LOG.debug("Change appaearance");
 
-				if (playableCharacterAgent.getAppearance() == WitchAppearance.NORMAL) {
+				if (playableCharacterAgent.getAppearance() == WitchAppearance.APPRENTICE) {
+					playableCharacterAgent.setAppearance(WitchAppearance.WITCH);
+				} else if (playableCharacterAgent.getAppearance() == WitchAppearance.WITCH) {
 					playableCharacterAgent.setAppearance(WitchAppearance.SPIDER);
 				} else {
-					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
+					playableCharacterAgent.setAppearance(WitchAppearance.WITCH);
 				}
-				
+
 				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
 
 				break;
@@ -161,6 +174,11 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 			throw new WitchFantasyException("Invalid cell for agent creation at location " + loc);
 		}
 
+	}
+
+	/** @return The current season */
+	public Season getSeason() {
+		return witchFantasyGameLevel.getSeason();
 	}
 
 }

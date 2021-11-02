@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import io.github.purpleloop.commons.xml.XMLTools;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
 import io.github.purpleloop.gameengine.action.model.level.XmlGameLevel;
+import io.github.purpleloop.gameengine.core.util.EngineException;
 
 /** Models a Witch-Fantasy level. */
 public class WitchFantasyGameLevel implements XmlGameLevel {
@@ -31,6 +32,9 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 	/** Next level id. */
 	private String nextLevel;
 
+	/** The season associated with the map. */
+	private Season season;
+
 	@Override
 	public void loadFromXml(Element levelElement) throws Exception {
 
@@ -40,6 +44,7 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 
 		width = Integer.parseInt(levelElement.getAttribute("width"));
 		height = Integer.parseInt(levelElement.getAttribute("height"));
+		season = Season.valueOf(levelElement.getAttribute("season"));
 
 		storage = new WitchFantasyMapContents[width][height];
 
@@ -51,9 +56,15 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 		for (Element line : lineElements) {
 
 			lineString = line.getTextContent();
+			int lineLength = lineString.length();
+
+			if (lineLength != width) {
+				throw new EngineException(
+						"A line of level " + id + " has an unexpected size : " + lineLength + " instead of " + width);
+			}
 
 			// For each cell of the line
-			for (int x = 0; x < lineString.length(); x++) {
+			for (int x = 0; x < lineLength; x++) {
 
 				// We get what static element should be placed in the cell.
 				char contentsChar = lineString.charAt(x);
@@ -63,8 +74,8 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 			y++;
 		}
 
-        Element linkElemnet = XMLTools.getUniqueChildElement(levelElement, "link").get();
-        nextLevel = linkElemnet.getAttribute("nextLevel");
+		Element linkElemnet = XMLTools.getUniqueChildElement(levelElement, "link").get();
+		nextLevel = linkElemnet.getAttribute("nextLevel");
 
 	}
 
@@ -91,6 +102,11 @@ public class WitchFantasyGameLevel implements XmlGameLevel {
 	/** @return height of the map */
 	public int getHeight() {
 		return height;
+	}
+
+	/** @return The associated season */
+	public Season getSeason() {
+		return season;
 	}
 
 }

@@ -56,7 +56,7 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 		this.controller = null;
 		this.actionStore = new SimpleActionStore();
 		this.player = player;
-		this.appearance = WitchAppearance.NORMAL;
+		this.appearance = WitchAppearance.APPRENTICE;
 	}
 
 	/** @return the player that controls this agent */

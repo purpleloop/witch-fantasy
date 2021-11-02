@@ -13,6 +13,7 @@ import io.github.purpleloop.commons.direction.Direction4;
 import io.github.purpleloop.commons.direction.Direction8;
 import io.github.purpleloop.commons.swing.sprites.Sprite;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
+import io.github.purpleloop.game.witchfantasy.model.Season;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyObject;
 import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
@@ -101,15 +102,30 @@ public class WitchFantasyView extends BaseGameView {
 
 		// Sprites for static contents on the map
 		for (WitchFantasyMapContents content : WitchFantasyMapContents.values()) {
-			spriteDesc.add(new Sprite(CONTENTS_SPRITE_PREFIX + content.ordinal(), UG * content.ordinal(), 0, UG, UG));
+			int ordinal = content.ordinal();
+
+			if (content.isSeasonal()) {
+
+				for (Season season : Season.values()) {
+					spriteDesc.add(new Sprite(CONTENTS_SPRITE_PREFIX + ordinal + season.name(), UG * ordinal,
+							UG * season.ordinal(), UG, UG));
+				}
+
+			} else {
+				spriteDesc.add(new Sprite(CONTENTS_SPRITE_PREFIX + ordinal, UG * ordinal, 0, UG, UG));
+			}
 		}
+
+		int agentOffset = UG * 4;
 
 		// Sprites for agents (animation / orientation)
 		for (int o = 0; o < 4; o++) {
-			spriteDesc.add(new Sprite("witch0" + o, UG * o, UG, UG, UG));
-			spriteDesc.add(new Sprite("witch1" + o, UG * o, UG * 2, UG, UG));
-			spriteDesc.add(new Sprite("spider0" + o, UG * o, UG + 2 * UG, UG, UG));
-			spriteDesc.add(new Sprite("spider1" + o, UG * o, UG * 2 + 2 * UG, UG, UG));
+			spriteDesc.add(new Sprite("apprentice0" + o, UG * o, agentOffset, UG, UG));
+			spriteDesc.add(new Sprite("apprentice1" + o, UG * o, agentOffset + 1 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch0" + o, UG * o, agentOffset + 2 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch1" + o, UG * o, agentOffset + 3 * UG, UG, UG));
+			spriteDesc.add(new Sprite("spider0" + o, UG * o, agentOffset + 4 * UG, UG, UG));
+			spriteDesc.add(new Sprite("spider1" + o, UG * o, agentOffset + 5 * UG, UG, UG));
 		} // for -- direction
 		return spriteDesc;
 	}
@@ -218,8 +234,9 @@ public class WitchFantasyView extends BaseGameView {
 				objectOrientation = 0;
 			}
 
-			putSprite(graphics2d, objectToPaint.getAppearance().getName() + objectToPaint.getAnimationSequence() + objectOrientation, x,
-					y);
+			putSprite(graphics2d,
+					objectToPaint.getAppearance().getName() + objectToPaint.getAnimationSequence() + objectOrientation,
+					x, y);
 
 			if (isDebugInfo()) {
 				paintDebugInfo(graphics2d, environmentObjects, objectToPaint, x, y);
@@ -239,6 +256,8 @@ public class WitchFantasyView extends BaseGameView {
 
 		WitchFantasyMapContents cellContents;
 
+		String seasonName = currentEnv.getSeason().name();
+
 		for (int y = 0; y < currentEnv.getCellHeight(); y++) {
 			for (int x = 0; x < currentEnv.getCellWidth(); x++) {
 				int xl = (x * UG) - viewX;
@@ -246,10 +265,16 @@ public class WitchFantasyView extends BaseGameView {
 
 				if (isInView(xl, yl)) {
 
-					putSprite(graphics, CONTENTS_SPRITE_PREFIX + "0", xl, yl);
+					// Background is always seasonal
+					putSprite(graphics, CONTENTS_SPRITE_PREFIX + "0" + seasonName, xl, yl);
+
 					cellContents = (WitchFantasyMapContents) currentEnv.getCellContents(x, y);
 					if (cellContents != WitchFantasyMapContents.START_PLACE) {
-						putSprite(graphics, CONTENTS_SPRITE_PREFIX + cellContents.ordinal(), xl, yl);
+						String name = CONTENTS_SPRITE_PREFIX + cellContents.ordinal();
+						if (cellContents.isSeasonal()) {
+							name = name + seasonName;
+						}
+						putSprite(graphics, name, xl, yl);
 					}
 				}
 			}
