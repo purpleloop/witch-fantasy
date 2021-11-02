@@ -8,8 +8,8 @@ public enum WitchAppearance implements IAppearance {
 	/** Start appearance, as an apprentice. */
 	APPRENTICE("apprentice"),
 
-	/** Appearance, as a witch. */
-	WITCH("witch"),	
+	/** Appearance, as a normal witch. */
+	NORMAL("normal"),	
 	
 	/** Familiar appearance, as a black spider. */
 	SPIDER("spider");

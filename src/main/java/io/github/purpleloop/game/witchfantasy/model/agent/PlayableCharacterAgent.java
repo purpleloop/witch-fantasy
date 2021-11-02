@@ -159,6 +159,7 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 	}
 
 	/** @return the character appearance */
+	@Override
 	public IAppearance getAppearance() {
 		return appearance;
 	}
@@ -166,11 +167,6 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 	/** @param appearance the character appearance */
 	public void setAppearance(WitchAppearance appearance) {
 		this.appearance = appearance;
-	}
-
-	@Override
-	public String getName() {
-		return appearance.getName();
 	}
 
 }

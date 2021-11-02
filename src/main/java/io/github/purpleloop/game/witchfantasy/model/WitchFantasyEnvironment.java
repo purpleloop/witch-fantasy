@@ -9,6 +9,7 @@ import io.github.purpleloop.commons.direction.Direction4;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyException;
 import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
 import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
+import io.github.purpleloop.game.witchfantasy.model.agent.VillagerAgent;
 import io.github.purpleloop.gameengine.action.model.environment.AbstractCellObjectEnvironment;
 import io.github.purpleloop.gameengine.action.model.interfaces.IAgent;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
@@ -19,6 +20,9 @@ import io.github.purpleloop.gameengine.core.util.Location;
 
 /** The Witch-Fantasy environment is based on a 2D cell object environment. */
 public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
+
+	/** Dummy villager name. */
+	private static final String VILLAGER_NAME = "villager";
 
 	/** Logger of the class. */
 	private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
@@ -44,6 +48,14 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 			WitchFantasyAgent witchAgent = spawnControlledAgentIn(getStartLocation(),
 					(WitchFantasyPlayer) session.getPlayers().get(0));
 			addObject(witchAgent);
+
+			for (int i = 0; i < 3; i++) {
+				Optional<VillagerAgent> villagerAgentOpt = spawnVillagerAgentRandomly();
+				if (villagerAgentOpt.isPresent()) {
+					addObject(villagerAgentOpt.get());
+				}
+			}
+
 		} catch (WitchFantasyException e) {
 			throw new EngineException("Error during the creation of the environment.", e);
 		}
@@ -119,11 +131,11 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 				LOG.debug("Change appaearance");
 
 				if (playableCharacterAgent.getAppearance() == WitchAppearance.APPRENTICE) {
-					playableCharacterAgent.setAppearance(WitchAppearance.WITCH);
-				} else if (playableCharacterAgent.getAppearance() == WitchAppearance.WITCH) {
+					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
+				} else if (playableCharacterAgent.getAppearance() == WitchAppearance.NORMAL) {
 					playableCharacterAgent.setAppearance(WitchAppearance.SPIDER);
 				} else {
-					playableCharacterAgent.setAppearance(WitchAppearance.WITCH);
+					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
 				}
 
 				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
@@ -174,6 +186,30 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 			throw new WitchFantasyException("Invalid cell for agent creation at location " + loc);
 		}
 
+	}
+
+	/**
+	 * Creates a villager agent at a random location of the environment.
+	 * 
+	 * @return the created agent
+	 */
+	private Optional<VillagerAgent> spawnVillagerAgentRandomly() {
+
+		VillagerAgent villagerAgent = new VillagerAgent(this);
+
+		Optional<Location> spawningLocationOptional = findRandomAllowedLocationForObject(villagerAgent);
+
+		if (spawningLocationOptional.isPresent()) {
+
+			Location spawningLocation = spawningLocationOptional.get();
+			villagerAgent.setName(VILLAGER_NAME);
+			villagerAgent.setLoc(spawningLocation.getX() * cellSize, spawningLocation.getY() * cellSize);
+			villagerAgent.setOrientation(Direction4.WEST);
+
+			return Optional.of(villagerAgent);
+		}
+
+		return Optional.empty();
 	}
 
 	/** @return The current season */

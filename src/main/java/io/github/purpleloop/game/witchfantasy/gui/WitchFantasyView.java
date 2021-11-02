@@ -117,15 +117,20 @@ public class WitchFantasyView extends BaseGameView {
 		}
 
 		int agentOffset = UG * 4;
+		int npcOffset = UG * 4;
 
 		// Sprites for agents (animation / orientation)
 		for (int o = 0; o < 4; o++) {
-			spriteDesc.add(new Sprite("apprentice0" + o, UG * o, agentOffset, UG, UG));
-			spriteDesc.add(new Sprite("apprentice1" + o, UG * o, agentOffset + 1 * UG, UG, UG));
-			spriteDesc.add(new Sprite("witch0" + o, UG * o, agentOffset + 2 * UG, UG, UG));
-			spriteDesc.add(new Sprite("witch1" + o, UG * o, agentOffset + 3 * UG, UG, UG));
-			spriteDesc.add(new Sprite("spider0" + o, UG * o, agentOffset + 4 * UG, UG, UG));
-			spriteDesc.add(new Sprite("spider1" + o, UG * o, agentOffset + 5 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch-apprentice0" + o, UG * o, agentOffset, UG, UG));
+			spriteDesc.add(new Sprite("witch-apprentice1" + o, UG * o, agentOffset + 1 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch-normal0" + o, UG * o, agentOffset + 2 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch-normal1" + o, UG * o, agentOffset + 3 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch-spider0" + o, UG * o, agentOffset + 4 * UG, UG, UG));
+			spriteDesc.add(new Sprite("witch-spider1" + o, UG * o, agentOffset + 5 * UG, UG, UG));
+			spriteDesc.add(new Sprite("villager-default-appearance0" + o, UG * o + npcOffset, agentOffset, UG, UG));
+			spriteDesc.add(
+					new Sprite("villager-default-appearance1" + o, UG * o + npcOffset, agentOffset + 1 * UG, UG, UG));
+
 		} // for -- direction
 		return spriteDesc;
 	}
@@ -234,9 +239,8 @@ public class WitchFantasyView extends BaseGameView {
 				objectOrientation = 0;
 			}
 
-			putSprite(graphics2d,
-					objectToPaint.getAppearance().getName() + objectToPaint.getAnimationSequence() + objectOrientation,
-					x, y);
+			putSprite(graphics2d, objectToPaint.getName() + "-" + objectToPaint.getAppearance().getName()
+					+ objectToPaint.getAnimationSequence() + objectOrientation, x, y);
 
 			if (isDebugInfo()) {
 				paintDebugInfo(graphics2d, environmentObjects, objectToPaint, x, y);
