@@ -93,7 +93,7 @@ public class PlayableCharacterAgent extends WitchFantasyAgent implements IContro
 
 		if (newOrientation != Direction.NONE) {
 			setOrientation(newOrientation);
-			setSpeed(envionment.getCellSize() / SPEED_FACTOR);
+			setSpeed(environment.getCellSize() / SPEED_FACTOR);
 		} else {
 			setSpeed(0);
 		}

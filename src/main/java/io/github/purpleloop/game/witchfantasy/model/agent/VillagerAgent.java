@@ -1,67 +1,103 @@
 package io.github.purpleloop.game.witchfantasy.model.agent;
 
-import java.util.Optional;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import io.github.purpleloop.commons.direction.Direction;
-import io.github.purpleloop.commons.direction.Direction8;
-import io.github.purpleloop.commons.math.GeomUtils;
+import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyAgent;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
+import io.github.purpleloop.gameengine.action.model.algorithms.PathFinder;
 import io.github.purpleloop.gameengine.core.util.Location;
 
 /** Models a villager agent. */
 public class VillagerAgent extends WitchFantasyAgent {
 
-	/**
-	 * Constructor for a villager agent.
-	 * 
-	 * @param witchFantasyEnvironment the environment
-	 */
-	public VillagerAgent(WitchFantasyEnvironment witchFantasyEnvironment) {
-		super(witchFantasyEnvironment);
-	}
+    /** Logger of the class. */
+    private static final Log LOG = LogFactory.getLog(VillagerAgent.class);
 
-	@Override
-	public void behave() {
-		
-		// Changes randomly it's direction towards a random location
-		if (random.nextInt(50) <= 1) {
-			Optional<Location> targetLocationOptional = envionment.findRandomAllowedLocationForObject(this);
+    /** An internal path finder. */
+    private PathFinder pathFinder;
 
-			if (targetLocationOptional.isPresent()) {
+    /** A target location where to head for. */
+    private Location targetLocation;
 
-				Location targetLocation = targetLocationOptional.get();
-				setOrientation(getOrientationForLocation(targetLocation.getX() * envionment.getCellWidth(),
-						targetLocation.getY() * envionment.getCellHeight()));
-				setSpeed(envionment.getCellSize() / 20);
-			}
-		}
+    /**
+     * Constructor for a villager agent.
+     * 
+     * @param witchFantasyEnvironment the environment
+     */
+    public VillagerAgent(WitchFantasyEnvironment witchFantasyEnvironment) {
+        super(witchFantasyEnvironment);
 
-	}
+        pathFinder = new PathFinder(witchFantasyEnvironment, this);
+        defineNextTarget();
+    }
 
-	/** Get the direction for heading to a given location */
-	public Direction getOrientationForLocation(int targetX, int targetY) {
+    @Override
+    public void behave() {
 
-		double bestDistance = Double.MAX_VALUE;
-		Direction bestDirection = Direction.NONE;
+        // Pragmatic choice : Decide direction to take only when exactly in a
+        // cell to avoid to take size into account when moving.
+        if (!isBetweenTwoCells() && targetLocation != null) {
+            setOrientation(getOrientationForLocation(targetLocation));
+            setSpeed(environment.getCellSize() / 20);
+        }
 
-		int testedX;
-		int testedY;
-		double testedDistance;
+    }
 
-		// Try each direction get
-		for (Direction testedDirection : Direction8.values()) {
-			testedX = (int) (xLoc + testedDirection.getXStep());
-			testedY = (int) (yLoc + testedDirection.getYStep());
+    /** Defines the next target (house). */
+    public void defineNextTarget() {
 
-			// Get the direction that minimizes the distance to the target
-			testedDistance = GeomUtils.distance(testedX, testedY, targetX, targetY);
-			if ((testedDistance <= bestDistance) && (envionment.isObjectAllowedAtLocation(this, testedX, testedY))) {
-				bestDistance = testedDistance;
-				bestDirection = testedDirection;
-			}
-		}
-		return bestDirection;
-	}
+        List<Location> houseLocations = environment
+                .findAllCellsLocationsMatchingContents(WitchFantasyMapContents.HOUSE);
+
+        int size = houseLocations.size();
+
+        if (size > 0) {
+            int houseLocationIndex = random.nextInt(size);
+            this.targetLocation = houseLocations.get(houseLocationIndex);
+
+            LOG.debug("Target location is house at " + targetLocation);
+        } else {
+            this.targetLocation = null;
+            LOG.debug("No target");
+        }
+    }
+
+    /**
+     * Tests if the agent position is between two cells.
+     * 
+     * @return true if the agent is across more than one cell, false otherwise
+     */
+    private boolean isBetweenTwoCells() {
+        int cellSize = environment.getCellSize();
+        int deltaX = xLoc % cellSize;
+        int deltaY = yLoc % cellSize;
+        return deltaX > 0 || deltaY > 0;
+    }
+
+    /**
+     * Get the direction for heading to a given target.
+     * 
+     * @param target the target location
+     * @return direction to follow
+     */
+    public Direction getOrientationForLocation(Location target) {
+
+        // The agent uses it's path finder to find the better direction to reach
+        // the target
+        pathFinder.reset();
+        pathFinder.setTarget(target);
+        pathFinder.propagate();
+        return pathFinder.findBetterDirection();
+    }
+
+    /** @return the current target of this agent, if any */
+    public Location getTarget() {
+        return targetLocation;
+    }
 
 }

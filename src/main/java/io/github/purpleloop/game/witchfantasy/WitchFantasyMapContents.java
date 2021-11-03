@@ -5,78 +5,81 @@ import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 /** Cell contents. */
 public enum WitchFantasyMapContents implements ICellContents {
 
-	/** An empty space or passage. */
-	EMPTY(' ', true),
+    /** An empty space or passage. */
+    EMPTY(' ', true),
 
-	/**
-	 * A block that cannot be passed over (dense trees, strong wood fence, stone or
-	 * brick wall, stone rock).
-	 */
-	BLOCK('#', true),
+    /**
+     * A block that cannot be passed over (dense trees, strong wood fence, stone
+     * or brick wall, stone rock).
+     */
+    BLOCK('#', true),
 
-	/** A chest. */
-	CHEST('C', false),
+    /** A chest. */
+    CHEST('C', false),
 
-	/** A fountain. */
-	FOUNTAIN('F', false),
+    /** A fountain. */
+    FOUNTAIN('F', false),
 
-	/** A key. */
-	KEY('K', false),
+    /** A key. */
+    KEY('K', false),
 
-	/** The start place where to . */
-	START_PLACE('+', false);
+    /** A house. */
+    HOUSE('H', false),
 
-	/** The char used to represent the contents in text files. */
-	private char code;
+    /** The start place where to . */
+    START_PLACE('+', false);
 
-	/**
-	 * True if the map contents has an adaptive appearance through the seasons,
-	 * false otherwise.
-	 */
-	private boolean seasonal;
+    /** The char used to represent the contents in text files. */
+    private char code;
 
-	/**
-	 * Private constructor for map contents.
-	 * 
-	 * @param code     character code used in map descriptor
-	 * @param seasonal if the map contents has an adaptive appearance through the
-	 *                 seasons, false otherwise
-	 */
-	WitchFantasyMapContents(char code, boolean seasonal) {
-		this.code = code;
-		this.seasonal = seasonal;
-	}
+    /**
+     * True if the map contents has an adaptive appearance through the seasons,
+     * false otherwise.
+     */
+    private boolean seasonal;
 
-	/**
-	 * @return the character code used for this content in the map descriptor
-	 */
-	@Override
-	public char getLevelChar() {
-		return code;
-	}
+    /**
+     * Private constructor for map contents.
+     * 
+     * @param code character code used in map descriptor
+     * @param seasonal if the map contents has an adaptive appearance through
+     *            the seasons, false otherwise
+     */
+    WitchFantasyMapContents(char code, boolean seasonal) {
+        this.code = code;
+        this.seasonal = seasonal;
+    }
 
-	/**
-	 * Get a map content by character code.
-	 * 
-	 * @param code the character code of the content to find
-	 * @return the map contents
-	 */
-	public static WitchFantasyMapContents getByChar(char code) throws WitchFantasyException {
+    /**
+     * @return the character code used for this content in the map descriptor
+     */
+    @Override
+    public char getLevelChar() {
+        return code;
+    }
 
-		for (WitchFantasyMapContents cnt : values()) {
-			if (cnt.getLevelChar() == code) {
-				return cnt;
-			}
-		}
-		throw new WitchFantasyException("Unsupported character " + code + ".");
-	}
+    /**
+     * Get a map content by character code.
+     * 
+     * @param code the character code of the content to find
+     * @return the map contents
+     */
+    public static WitchFantasyMapContents getByChar(char code) throws WitchFantasyException {
 
-	/**
-	 * @return true if the map contents has an adaptive appearance through the
-	 *         seasons, false otherwise.
-	 */
-	public boolean isSeasonal() {
-		return seasonal;
-	}
+        for (WitchFantasyMapContents cnt : values()) {
+            if (cnt.getLevelChar() == code) {
+                return cnt;
+            }
+        }
+        throw new WitchFantasyException("Unsupported character " + code + ".");
+    }
+
+    /**
+     * @return true if the map contents has an adaptive appearance through the
+     *         seasons, false otherwise.
+     */
+    public boolean isSeasonal() {
+        return seasonal;
+    }
 
 }

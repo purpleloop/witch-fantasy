@@ -1,5 +1,6 @@
 package io.github.purpleloop.game.witchfantasy.model;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.logging.Log;
@@ -21,200 +22,232 @@ import io.github.purpleloop.gameengine.core.util.Location;
 /** The Witch-Fantasy environment is based on a 2D cell object environment. */
 public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
-	/** Dummy villager name. */
-	private static final String VILLAGER_NAME = "villager";
+    /** Dummy villager name. */
+    private static final String VILLAGER_NAME = "villager";
 
-	/** Logger of the class. */
-	private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
+    /** Logger of the class. */
+    private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
 
-	/**
-	 * The current game level.
-	 * 
-	 * TODO Maybe move this game environment-level link up in the class hierarchy ?
-	 * It seems useful ...
-	 */
-	private WitchFantasyGameLevel witchFantasyGameLevel;
+    /**
+     * The current game level.
+     * 
+     * TODO Maybe move this game environment-level link up in the class
+     * hierarchy ? It seems useful ...
+     */
+    private WitchFantasyGameLevel witchFantasyGameLevel;
 
-	/**
-	 * Constructor of the environment.
-	 * 
-	 * @param session the game session
-	 * @param level   the game level
-	 */
-	public WitchFantasyEnvironment(ISession session, IGameLevel level) throws EngineException {
-		super(session, level);
+    /**
+     * Constructor of the environment.
+     * 
+     * @param session the game session
+     * @param level the game level
+     */
+    public WitchFantasyEnvironment(ISession session, IGameLevel level) throws EngineException {
+        super(session, level);
 
-		try {
-			WitchFantasyAgent witchAgent = spawnControlledAgentIn(getStartLocation(),
-					(WitchFantasyPlayer) session.getPlayers().get(0));
-			addObject(witchAgent);
+        try {
+            WitchFantasyAgent witchAgent = spawnControlledAgentIn(getStartLocation(),
+                    (WitchFantasyPlayer) session.getPlayers().get(0));
+            addObject(witchAgent);
 
-			for (int i = 0; i < 3; i++) {
-				Optional<VillagerAgent> villagerAgentOpt = spawnVillagerAgentRandomly();
-				if (villagerAgentOpt.isPresent()) {
-					addObject(villagerAgentOpt.get());
-				}
-			}
+            List<Location> housesLocations = findAllCellsLocationsMatchingContents(
+                    WitchFantasyMapContents.HOUSE);
 
-		} catch (WitchFantasyException e) {
-			throw new EngineException("Error during the creation of the environment.", e);
-		}
+            for (Location houseLocation : housesLocations) {
+                VillagerAgent villagerAgent = spawnVillagerAgentAt(houseLocation);
+                addObject(villagerAgent);
 
-	}
+            }
 
-	/**
-	 * @return the start location in the map.
-	 * @throws EngineException in case of problems
-	 */
-	private Location getStartLocation() throws EngineException {
+        } catch (WitchFantasyException e) {
+            throw new EngineException("Error during the creation of the environment.", e);
+        }
 
-		Optional<Location> startLocationOptional = findFirstCellLocationMatchingContents(
-				WitchFantasyMapContents.START_PLACE);
+    }
 
-		if (startLocationOptional.isEmpty()) {
-			throw new EngineException("No start location could be found on the map.");
-		}
+    /**
+     * @return the start location in the map.
+     * @throws EngineException in case of problems
+     */
+    private Location getStartLocation() throws EngineException {
 
-		return startLocationOptional.get();
+        Optional<Location> startLocationOptional = findFirstCellLocationMatchingContents(
+                WitchFantasyMapContents.START_PLACE);
 
-	}
+        if (startLocationOptional.isEmpty()) {
+            throw new EngineException("No start location could be found on the map.");
+        }
 
-	@Override
-	protected void initFromGameLevel() {
-		this.witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
+        return startLocationOptional.get();
 
-		WitchFantasyMapContents[][] gameLevelStorage = witchFantasyGameLevel.getStorage();
+    }
 
-		int levelWidth = witchFantasyGameLevel.getWidth();
-		int levelHeight = witchFantasyGameLevel.getHeight();
-		initStorage(levelWidth, levelHeight);
+    @Override
+    protected void initFromGameLevel() {
+        this.witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
 
-		for (int y = 0; y < cellHeight; y++) {
-			for (int x = 0; x < cellWidth; x++) {
-				this.setCellContents(x, y, gameLevelStorage[x][y]);
-			}
-		}
+        WitchFantasyMapContents[][] gameLevelStorage = witchFantasyGameLevel.getStorage();
 
-	}
+        int levelWidth = witchFantasyGameLevel.getWidth();
+        int levelHeight = witchFantasyGameLevel.getHeight();
+        initStorage(levelWidth, levelHeight);
 
-	@Override
-	public boolean isObjectAllowedAtCell(IEnvironmentObjet testedObject, int x, int y) {
+        for (int y = 0; y < cellHeight; y++) {
+            for (int x = 0; x < cellWidth; x++) {
+                this.setCellContents(x, y, gameLevelStorage[x][y]);
+            }
+        }
 
-		WitchFantasyMapContents cellContentsCode = (WitchFantasyMapContents) getCellContents(x, y);
+    }
 
-		if (testedObject instanceof IAgent) {
+    @Override
+    public boolean isObjectAllowedAtCell(IEnvironmentObjet testedObject, int x, int y) {
 
-			// No agent can go through a block
-			if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
-				return false;
-			}
+        WitchFantasyMapContents cellContentsCode = (WitchFantasyMapContents) getCellContents(x, y);
 
-		}
+        if (testedObject instanceof IAgent) {
 
-		return true;
-	}
+            // No agent can go through a block
+            if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
+                return false;
+            }
 
-	@Override
-	public void reachingCell(IEnvironmentObjet object, int x, int y) {
+        }
 
-		WitchFantasyMapContents cellContents = (WitchFantasyMapContents) getCellContents(x, y);
+        return true;
+    }
 
-		if (object instanceof PlayableCharacterAgent) {
+    @Override
+    public void reachingCell(IEnvironmentObjet object, int x, int y) {
 
-			PlayableCharacterAgent playableCharacterAgent = (PlayableCharacterAgent) object;
+        WitchFantasyMapContents cellContents = (WitchFantasyMapContents) getCellContents(x, y);
 
-			switch (cellContents) {
+        if (object instanceof PlayableCharacterAgent) {
 
-			case CHEST:
-				// Wow change appearance test
+            PlayableCharacterAgent playableCharacterAgent = (PlayableCharacterAgent) object;
 
-				LOG.debug("Change appaearance");
+            switch (cellContents) {
 
-				if (playableCharacterAgent.getAppearance() == WitchAppearance.APPRENTICE) {
-					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
-				} else if (playableCharacterAgent.getAppearance() == WitchAppearance.NORMAL) {
-					playableCharacterAgent.setAppearance(WitchAppearance.SPIDER);
-				} else {
-					playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
-				}
+            case CHEST:
+                // Wow change appearance test
 
-				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
+                LOG.debug("Change appaearance");
 
-				break;
+                if (playableCharacterAgent.getAppearance() == WitchAppearance.APPRENTICE) {
+                    playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
+                } else if (playableCharacterAgent.getAppearance() == WitchAppearance.NORMAL) {
+                    playableCharacterAgent.setAppearance(WitchAppearance.SPIDER);
+                } else {
+                    playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
+                }
 
-			case KEY:
-				// The agent grabs the key
-				playableCharacterAgent.grab(WitchFantasyMapContents.KEY);
-				setCellContents(x, y, WitchFantasyMapContents.EMPTY);
-				break;
+                setCellContents(x, y, WitchFantasyMapContents.EMPTY);
 
-			case FOUNTAIN:
-				// The agent reached the exit of the current level
-				fireEnvironmentChanged(new WitchFantasyEvent(WitchFantasyEvent.EXIT_REACHED));
-				break;
+                break;
 
-			default:
-			}
-		}
+            case KEY:
+                // The agent grabs the key
+                playableCharacterAgent.grab(WitchFantasyMapContents.KEY);
+                setCellContents(x, y, WitchFantasyMapContents.EMPTY);
+                break;
 
-	}
+            case FOUNTAIN:
+                // The agent reached the exit of the current level
+                fireEnvironmentChanged(new WitchFantasyEvent(WitchFantasyEvent.EXIT_REACHED));
+                break;
 
-	/**
-	 * This method creates a controlled agent in a specific location of the
-	 * environment.
-	 * 
-	 * @param loc    the location of the creation
-	 * @param player the player that controls the agent
-	 * @return the created agent
-	 * @throws WitchFantasyException in case of error during the agent creation
-	 */
-	protected WitchFantasyAgent spawnControlledAgentIn(Location loc, WitchFantasyPlayer player)
-			throws WitchFantasyException {
+            default:
+            }
+        } else if (object instanceof VillagerAgent) {
 
-		int xl = loc.getX();
-		int yl = loc.getY();
+            VillagerAgent villagerAgent = (VillagerAgent) object;
 
-		PlayableCharacterAgent agt = new PlayableCharacterAgent(this, player);
+            switch (cellContents) {
 
-		boolean isValidCell = isValidCell(xl, yl) && isObjectAllowedAtCell(agt, xl, yl);
-		if (isValidCell) {
-			agt.setName("witch");
-			agt.setLoc(xl * cellSize, yl * cellSize);
-			agt.setOrientation(Direction4.EAST);
-			return agt;
-		} else {
-			throw new WitchFantasyException("Invalid cell for agent creation at location " + loc);
-		}
+            case HOUSE:
+                // The agents change it's target if arrived at the targeted home
+                Location targetLocation = villagerAgent.getTarget();
+                if (targetLocation.equals(x, y)) {
+                    villagerAgent.defineNextTarget();
+                }
 
-	}
+                break;
 
-	/**
-	 * Creates a villager agent at a random location of the environment.
-	 * 
-	 * @return the created agent
-	 */
-	private Optional<VillagerAgent> spawnVillagerAgentRandomly() {
+            default:
+            }
 
-		VillagerAgent villagerAgent = new VillagerAgent(this);
+        }
 
-		Optional<Location> spawningLocationOptional = findRandomAllowedLocationForObject(villagerAgent);
+    }
 
-		if (spawningLocationOptional.isPresent()) {
+    /**
+     * This method creates a controlled agent in a specific location of the
+     * environment.
+     * 
+     * @param loc the location of the creation
+     * @param player the player that controls the agent
+     * @return the created agent
+     * @throws WitchFantasyException in case of error during the agent creation
+     */
+    protected WitchFantasyAgent spawnControlledAgentIn(Location loc, WitchFantasyPlayer player)
+            throws WitchFantasyException {
 
-			Location spawningLocation = spawningLocationOptional.get();
-			villagerAgent.setName(VILLAGER_NAME);
-			villagerAgent.setLoc(spawningLocation.getX() * cellSize, spawningLocation.getY() * cellSize);
-			villagerAgent.setOrientation(Direction4.WEST);
+        int xl = loc.getX();
+        int yl = loc.getY();
 
-			return Optional.of(villagerAgent);
-		}
+        PlayableCharacterAgent agt = new PlayableCharacterAgent(this, player);
 
-		return Optional.empty();
-	}
+        boolean isValidCell = isValidCell(xl, yl) && isObjectAllowedAtCell(agt, xl, yl);
+        if (isValidCell) {
+            agt.setName("witch");
+            agt.setLoc(xl * cellSize, yl * cellSize);
+            agt.setOrientation(Direction4.EAST);
+            return agt;
+        } else {
+            throw new WitchFantasyException("Invalid cell for agent creation at location " + loc);
+        }
 
-	/** @return The current season */
-	public Season getSeason() {
-		return witchFantasyGameLevel.getSeason();
-	}
+    }
+
+    private VillagerAgent spawnVillagerAgentAt(Location spawningLocation) {
+
+        VillagerAgent villagerAgent = new VillagerAgent(this);
+        villagerAgent.setName(VILLAGER_NAME);
+        villagerAgent.setLoc(spawningLocation.getX() * cellSize,
+                spawningLocation.getY() * cellSize);
+        villagerAgent.setOrientation(Direction4.WEST);
+        return villagerAgent;
+    }
+
+    /**
+     * Creates a villager agent at a random location of the environment.
+     * 
+     * @return the created agent
+     */
+    private Optional<VillagerAgent> spawnVillagerAgentRandomly() {
+
+        VillagerAgent villagerAgent = new VillagerAgent(this);
+
+        Optional<Location> spawningLocationOptional = findRandomAllowedLocationForObject(
+                villagerAgent);
+
+        if (spawningLocationOptional.isPresent()) {
+
+            Location spawningLocation = spawningLocationOptional.get();
+            villagerAgent.setName(VILLAGER_NAME);
+            villagerAgent.setLoc(spawningLocation.getX() * cellSize,
+                    spawningLocation.getY() * cellSize);
+            villagerAgent.setOrientation(Direction4.WEST);
+
+            return Optional.of(villagerAgent);
+        }
+
+        return Optional.empty();
+    }
+
+    /** @return The current season */
+    public Season getSeason() {
+        return witchFantasyGameLevel.getSeason();
+    }
 
 }

@@ -2,28 +2,28 @@
 <levels start="1">
     <level height="18" id="1" width="24" season="SPRING">
         <line>########################</line>
-        <line>#+     #             ###</line>
-        <line>#       #             ##</line>
+        <line>#+   ###H       H    ###</line>
+        <line>#     ###             ##</line>
         <line>##    ##             ###</line>
-        <line>##           ###     ###</line>
-        <line>#     ####         #####</line>
-        <line>##                ###  #</line>
+        <line>##          ####     ###</line>
+        <line>#     ####   ##    #####</line>
+        <line>##   ###          H##  #</line>
         <line>##   #C    #    ###   ##</line>
-        <line>#    #   ##      #   # #</line>
-        <line>#       #           # ##</line>
-        <line>##        ##     ##    #</line>
-        <line>##       #####    #   K#</line>
-        <line>####                 ###</line>
-        <line>##     ###          ####</line>
-        <line>###          #       ###</line>
+        <line>#   ##   ###     #   ###</line>
+        <line>#       ##            ##</line>
+        <line>##         ##    ##    #</line>
+        <line>###H       ###    #   K#</line>
+        <line>####   ##            ###</line>
+        <line>##H   ####          ####</line>
+        <line>###    ##     #      ###</line>
         <line>##   #     ###       ###</line>
-        <line>###  ##   ###     F#####</line>
+        <line>###  ##H  ###     F#####</line>
         <line>########################</line>
         <link nextLevel="2" />
     </level>
     <level height="18" id="2" width="24" season="SUMMER">
         <line>########################</line>
-        <line>#+  #######C   ##    ###</line>
+        <line>#+  #######C   ## H  ###</line>
         <line>#    ####     ##      ##</line>
         <line>##   ###     ##      ###</line>
         <line>##  ####     ###   #####</line>
@@ -38,7 +38,7 @@
         <line>##     ###          ####</line>
         <line>###   ##     #       ###</line>
         <line>##   ###   ###       ###</line>
-        <line>###  ##F  ###      #####</line>
+        <line>### H##F  ###      #####</line>
         <line>########################</line>
         <link nextLevel="3" />
     </level>

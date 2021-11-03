@@ -11,7 +11,7 @@ import io.github.purpleloop.gameengine.action.model.objects.GameObject;
 public class WitchFantasyObject extends GameObject {
 
 	/** The objet's environment. */
-	protected AbstractCellObjectEnvironment envionment;
+	protected AbstractCellObjectEnvironment environment;
 
 	/** The object speed. */
 	private int speed;
@@ -35,7 +35,7 @@ public class WitchFantasyObject extends GameObject {
 	 */
 	public WitchFantasyObject(AbstractCellObjectEnvironment env) {
 		super();
-		this.envionment = env;
+		this.environment = env;
 
 		this.animationSequence = 0;
 		animationTimer = new GameTimer(ANIMATION_DELAY);
@@ -87,7 +87,7 @@ public class WitchFantasyObject extends GameObject {
 			return;
 		}
 
-		int ug = envionment.getCellSize();
+		int ug = environment.getCellSize();
 
 		// Compute new coordinates of the object
 		// from current ones according to speed and heading.
@@ -95,18 +95,18 @@ public class WitchFantasyObject extends GameObject {
 		int ny = (int) (yLoc + speed * orientation.getYStep());
 
 		// We must check if new coordinates are valid
-		if (envionment.isObjectInBounds(nx, ny)) {
+		if (environment.isObjectInBounds(nx, ny)) {
 
 			// If the move is blocked by a wall or something similar
 			// we check if the object can slide and correct the orientation temporarily
-			if (!envionment.isObjectAllowedAtLocation(this, nx, ny)) {
+			if (!environment.isObjectAllowedAtLocation(this, nx, ny)) {
 
-				if (envionment.isObjectAllowedAtLocation(this, nx, yLoc)) {
+				if (environment.isObjectAllowedAtLocation(this, nx, yLoc)) {
 					// the object can slide by keeping just horizontal component of the movement
 					ny = yLoc;
 					orientation = orientation.keepHorizontalMove();
 
-				} else if (envionment.isObjectAllowedAtLocation(this, xLoc, ny)) {
+				} else if (environment.isObjectAllowedAtLocation(this, xLoc, ny)) {
 					// the object can slide by keeping just vertical component of the movement
 					nx = xLoc;
 					orientation = orientation.keepVerticalMove();
@@ -117,7 +117,7 @@ public class WitchFantasyObject extends GameObject {
 
 			// We check if there is no static object that blocks the target location (nx,
 			// ny).
-			if (envionment.isObjectAllowedAtLocation(this, nx, ny)) {
+			if (environment.isObjectAllowedAtLocation(this, nx, ny)) {
 
 				// We must check if the object does not collide another object.
 				// To do this, we use collision rectangles.
@@ -129,7 +129,7 @@ public class WitchFantasyObject extends GameObject {
 				Rectangle resultingCollisionRectangle = new Rectangle(nx, ny, ug - 1, ug - 1);
 
 				// We examine each other object
-				for (IEnvironmentObjet other : envionment.getObjects()) {
+				for (IEnvironmentObjet other : environment.getObjects()) {
 
 					// If the object is different from this one
 					if (other.getId() != getId()) {
@@ -166,20 +166,20 @@ public class WitchFantasyObject extends GameObject {
 
 					if (rx == 0) {
 						if (ry == 0) {
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug);
 						} else {
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug);
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug + 1);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug + 1);
 						}
 					} else {
 						if (ry == 0) {
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug);
-							envionment.reachingCell(this, xLoc / ug + 1, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug + 1, yLoc / ug);
 						} else {
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug);
-							envionment.reachingCell(this, xLoc / ug, yLoc / ug + 1);
-							envionment.reachingCell(this, xLoc / ug + 1, yLoc / ug);
-							envionment.reachingCell(this, xLoc / ug + 1, yLoc / ug + 1);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug, yLoc / ug + 1);
+							environment.reachingCell(this, xLoc / ug + 1, yLoc / ug);
+							environment.reachingCell(this, xLoc / ug + 1, yLoc / ug + 1);
 						}
 					}
 

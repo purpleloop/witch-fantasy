@@ -307,7 +307,7 @@ public class WitchFantasyView extends BaseGameView {
 	private void paintDebugInfo(Graphics2D graphics2d, List<IEnvironmentObjet> environmentObjects,
 			IEnvironmentObjet objectToPaint, int x, int y) {
 
-		graphics2d.setColor(Color.WHITE);
+		graphics2d.setColor(Color.MAGENTA);
 		WitchFantasyObject specificObject = (WitchFantasyObject) objectToPaint;
 		StringBuilder sb = new StringBuilder();
 		sb.append(objectToPaint.getName());
@@ -320,7 +320,7 @@ public class WitchFantasyView extends BaseGameView {
 		sb.append(", ori=");
 		sb.append(specificObject.getOrientation());
 		sb.append(", appearance=");
-		sb.append(objectToPaint.getAppearance());
+		sb.append(objectToPaint.getAppearance().getName());
 
 		graphics2d.drawString(sb.toString(), x, y);
 
