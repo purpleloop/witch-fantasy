@@ -68,18 +68,6 @@ public class VillagerAgent extends WitchFantasyAgent {
     }
 
     /**
-     * Tests if the agent position is between two cells.
-     * 
-     * @return true if the agent is across more than one cell, false otherwise
-     */
-    private boolean isBetweenTwoCells() {
-        int cellSize = environment.getCellSize();
-        int deltaX = xLoc % cellSize;
-        int deltaY = yLoc % cellSize;
-        return deltaX > 0 || deltaY > 0;
-    }
-
-    /**
      * Get the direction for heading to a given target.
      * 
      * @param target the target location
