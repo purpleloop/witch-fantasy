@@ -36,6 +36,15 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
      */
     private WitchFantasyGameLevel witchFantasyGameLevel;
 
+    /** The weather model. */
+    private WeatherModel weatherModel;
+
+    /**
+     * Is the weather model active. TODO How to activate custom environment
+     * features from configuration ?
+     */
+    private boolean weatherModelActive = false;
+
     /**
      * Constructor of the environment.
      * 
@@ -57,6 +66,10 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
                 VillagerAgent villagerAgent = spawnVillagerAgentAt(houseLocation);
                 addObject(villagerAgent);
 
+            }
+
+            if (weatherModelActive) {
+                weatherModel = new WeatherModel(width, height);
             }
 
         } catch (WitchFantasyException e) {
@@ -248,6 +261,22 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     /** @return The current season */
     public Season getSeason() {
         return witchFantasyGameLevel.getSeason();
+    }
+
+    @Override
+    protected void specificEvolve() throws EngineException {
+        if (weatherModelActive) {
+            weatherModel.update();
+        }
+    }
+
+    /** @return an optional of the weather model. */
+    public Optional<WeatherModel> getWeatherModel() {
+        if (weatherModelActive) {
+            return Optional.of(weatherModel);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }
