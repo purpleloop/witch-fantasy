@@ -200,5 +200,17 @@ public class WitchFantasyObject extends GameObject {
 	public String toString() {
 		return new StringBuilder().append(super.toString()).append(", speed=").append(speed).toString();
 	}
+	
+    /**
+     * Tests if the agent position is between two cells.
+     * 
+     * @return true if the agent is across more than one cell, false otherwise
+     */
+    protected boolean isBetweenTwoCells() {
+        int cellSize = environment.getCellSize();
+        int deltaX = xLoc % cellSize;
+        int deltaY = yLoc % cellSize;
+        return deltaX > 0 || deltaY > 0;
+    }
 
 }
