@@ -16,6 +16,8 @@ import io.github.purpleloop.gameengine.action.model.interfaces.IAgent;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
 import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
 import io.github.purpleloop.gameengine.action.model.level.IGameLevel;
+import io.github.purpleloop.gameengine.action.model.level.LevelLink;
+import io.github.purpleloop.gameengine.action.model.level.LocatedLevelLink;
 import io.github.purpleloop.gameengine.core.util.EngineException;
 import io.github.purpleloop.gameengine.core.util.Location;
 
@@ -28,14 +30,6 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     /** Logger of the class. */
     private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
 
-    /**
-     * The current game level.
-     * 
-     * TODO Maybe move this game environment-level link up in the class
-     * hierarchy ? It seems useful ...
-     */
-    private WitchFantasyGameLevel witchFantasyGameLevel;
-
     /** The weather model. */
     private WeatherModel weatherModel;
 
@@ -44,6 +38,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
      * features from configuration ?
      */
     private boolean weatherModelActive = false;
+
+    /** The associated season. */
+    private Season season;
 
     /**
      * Constructor of the environment.
@@ -97,7 +94,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
     @Override
     protected void initFromGameLevel() {
-        this.witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
+        WitchFantasyGameLevel witchFantasyGameLevel = (WitchFantasyGameLevel) getLevel();
 
         WitchFantasyMapContents[][] gameLevelStorage = witchFantasyGameLevel.getStorage();
 
@@ -111,6 +108,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             }
         }
 
+        this.season = witchFantasyGameLevel.getSeason();
     }
 
     @Override
@@ -131,7 +129,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     }
 
     @Override
-    public void reachingCell(IEnvironmentObjet object, int x, int y) {
+    public void reachingCell(IEnvironmentObjet object, int x, int y) throws EngineException {
 
         WitchFantasyMapContents cellContents = (WitchFantasyMapContents) getCellContents(x, y);
 
@@ -144,7 +142,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             case CHEST:
                 // Wow change appearance test
 
-                LOG.debug("Change appaearance");
+                LOG.debug("Reaching a chest, so change appaearance");
 
                 if (playableCharacterAgent.getAppearance() == WitchAppearance.APPRENTICE) {
                     playableCharacterAgent.setAppearance(WitchAppearance.NORMAL);
@@ -160,13 +158,25 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
             case KEY:
                 // The agent grabs the key
+
+                LOG.debug("Reaching a keg - grab it");
+
                 playableCharacterAgent.grab(WitchFantasyMapContents.KEY);
                 setCellContents(x, y, WitchFantasyMapContents.EMPTY);
                 break;
 
             case FOUNTAIN:
-                // The agent reached the exit of the current level
-                fireEnvironmentChanged(new WitchFantasyEvent(WitchFantasyEvent.EXIT_REACHED));
+                // The agent reached a fountain
+
+                LOG.debug("Reaching a fountain in (" + x + "," + y + ") ... applying links");
+
+                for (LevelLink link : getLevel().getLinks()) {
+                    LocatedLevelLink abstractLocatedLevelLink = (LocatedLevelLink) link;
+                    if (abstractLocatedLevelLink.matches(x, y)) {
+                        abstractLocatedLevelLink.applyChanges(this, playableCharacterAgent);
+                    }
+                }
+
                 break;
 
             default:
@@ -189,6 +199,24 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             default:
             }
 
+        }
+
+    }
+
+    @Override
+    public void reachExit(String nextLevel, IEnvironmentObjet object) {
+
+        if (object instanceof PlayableCharacterAgent) {
+            fireEnvironmentChanged(new ExitReachedEvent(nextLevel));
+        }
+    }
+
+    @Override
+    public void locationJump(Location destinationLocation, IEnvironmentObjet object) {
+
+        if (object instanceof WitchFantasyObject) {
+            ((WitchFantasyObject) object).setLoc(destinationLocation.getX() * cellSize,
+                    destinationLocation.getY() * cellSize);
         }
 
     }
@@ -260,7 +288,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
     /** @return The current season */
     public Season getSeason() {
-        return witchFantasyGameLevel.getSeason();
+        return this.season;
     }
 
     @Override

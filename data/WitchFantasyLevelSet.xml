@@ -19,28 +19,33 @@
         <line>##   #     ###       ###</line>
         <line>###  ##H  ###     F#####</line>
         <line>########################</line>
-        <link nextLevel="2" />
+        <link sx="18" sy="16" nextLevel="2" />
     </level>
     <level height="18" id="2" width="24" season="SUMMER">
         <line>########################</line>
         <line>#+  #######C   ## H  ###</line>
         <line>#    ####     ##      ##</line>
-        <line>##   ###     ##      ###</line>
-        <line>##  ####     ###   #####</line>
-        <line>#     ####         #####</line>
-        <line>##    ###        ###  C#</line>
-        <line>##   #     #    ###   ##</line>
-        <line>#    #   ##      #   ###</line>
-        <line>#       ###         # ##</line>
+        <line>##   ###     ##     ####</line>
+        <line>##  ####     ###   ##F##</line>
+        <line>#     ####   #     ## ##</line>
+        <line>##    ###   ##   ###  C#</line>
+        <line>##   #    F##   ###   ##</line>
+        <line>#    #   ###     #   ###</line>
+        <line>#       ###F     #  #F##</line>
         <line>##     #####     ##    #</line>
-        <line>##       #####    ####K#</line>
+        <line>##      F#####    ####K#</line>
         <line>####    ###          ###</line>
         <line>##     ###          ####</line>
         <line>###   ##     #       ###</line>
         <line>##   ###   ###       ###</line>
-        <line>### H##F  ###      #####</line>
+        <line>###  ##F  ###     H#####</line>
         <line>########################</line>
-        <link nextLevel="3" />
+        <link sx="10" sy="7" dx="12" dy="9" />
+        <link sx="11" sy="9" dx="9" dy="7" />
+        <link sx="8" sy="11" dx="18" dy="8" />
+        <link sx="21" sy="4" dx="9" dy="7" />
+        <link sx="7" sy="16" nextLevel="1" />
+        <link sx="21" sy="9" nextLevel="3" />
     </level>
     <level height="18" id="3" width="24" season="FALL">
         <line>########################</line>
@@ -61,28 +66,30 @@
         <line># ####   ########### # #</line>
         <line>#                    #F#</line>
         <line>########################</line>
-        <link nextLevel="4" />
+        <link sx="22" sy="16" nextLevel="4" />
     </level>    
     <level height="18" id="4" width="24" season="WINTER">
         <line>########################</line>
-        <line>#F#                    #</line>
-        <line># #     #              #</line>
-        <line>#     ##               #</line>
-        <line>####         ###       #</line>
-        <line>#     ##               #</line>
-        <line>##           +    ###  #</line>
+        <line>#F#     ###F       K####</line>
+        <line># #     ##             #</line>
+        <line>#     ## ###          ##</line>
+        <line>####      #######   ####</line>
+        <line>#     ##        ## ##  #</line>
+        <line>##           +   ####  #</line>
         <line>##   #C    #    ###   ##</line>
         <line>#    #   #       #   # #</line>
         <line>#       #           # ##</line>
         <line>##        #      ##    #</line>
-        <line>##           #    #   K#</line>
+        <line>##           #    #    #</line>
         <line>####                 ###</line>
         <line>##                     #</line>
         <line>###          #       ###</line>
         <line>##   #     ###       ###</line>
         <line>###  ##   ###     F   ##</line>
         <line>########################</line>
-        <link nextLevel="1" />
+        <link sx="1" sy="1" nextLevel="1" />
+        <link sx="11" sy="1" dx="13" dy="6" />
+        <link sx="18" sy="16" dx="22" dy="2" />
     </level>
 
 </levels>
