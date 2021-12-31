@@ -32,7 +32,7 @@ public class VillagerAgent extends WitchFantasyAgent {
     public VillagerAgent(WitchFantasyEnvironment witchFantasyEnvironment) {
         super(witchFantasyEnvironment);
 
-        pathFinder = new PathFinder(witchFantasyEnvironment, this);
+        pathFinder = new WitchFantasyPathFinder(witchFantasyEnvironment, this);
         defineNextTarget();
     }
 

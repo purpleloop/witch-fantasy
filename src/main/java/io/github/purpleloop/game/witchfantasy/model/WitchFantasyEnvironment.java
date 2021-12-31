@@ -18,6 +18,7 @@ import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
 import io.github.purpleloop.gameengine.action.model.level.IGameLevel;
 import io.github.purpleloop.gameengine.action.model.level.LevelLink;
 import io.github.purpleloop.gameengine.action.model.level.LocatedLevelLink;
+import io.github.purpleloop.gameengine.action.model.level.LocationJump;
 import io.github.purpleloop.gameengine.core.util.EngineException;
 import io.github.purpleloop.gameengine.core.util.Location;
 
@@ -192,6 +193,21 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
                 Location targetLocation = villagerAgent.getTarget();
                 if (targetLocation.equals(x, y)) {
                     villagerAgent.defineNextTarget();
+                }
+
+                break;
+
+            case FOUNTAIN:
+                // The agent reached a fountain
+
+                LOG.debug("Reaching a fountain in (" + x + "," + y + ") ... applying links");
+
+                for (LevelLink link : getLevel().getLinks()) {
+                    LocatedLevelLink abstractLocatedLevelLink = (LocatedLevelLink) link;
+                    if ((abstractLocatedLevelLink instanceof LocationJump)
+                            && abstractLocatedLevelLink.matches(x, y)) {
+                        abstractLocatedLevelLink.applyChanges(this, villagerAgent);
+                    }
                 }
 
                 break;

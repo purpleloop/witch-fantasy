@@ -330,6 +330,7 @@ public class WitchFantasyView extends BaseGameView {
                         putSprite(graphics, name, xl, yl);
                     }
                 }
+
             }
         }
 
@@ -358,13 +359,21 @@ public class WitchFantasyView extends BaseGameView {
             IEnvironmentObjet objectToPaint, int x, int y) {
 
         graphics2d.setColor(Color.MAGENTA);
+
         WitchFantasyObject specificObject = (WitchFantasyObject) objectToPaint;
+        int xLoc = specificObject.getXLoc();
+        int yLoc = specificObject.getYLoc();
+
         StringBuilder sb = new StringBuilder();
         sb.append(objectToPaint.getName());
         sb.append(" coords=");
-        sb.append(specificObject.getXLoc());
+        sb.append(xLoc);
         sb.append(",");
-        sb.append(specificObject.getYLoc());
+        sb.append(yLoc);
+        sb.append(" cell=");
+        sb.append(xLoc / UG);
+        sb.append(",");
+        sb.append(yLoc / UG);
         sb.append(", speed=");
         sb.append(specificObject.getSpeed());
         sb.append(", ori=");

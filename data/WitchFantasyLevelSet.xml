@@ -30,20 +30,20 @@
         <line>#     ####   #     ## ##</line>
         <line>##    ###   ##   ###  C#</line>
         <line>##   #    F##   ###   ##</line>
-        <line>#    #   ###     #   ###</line>
-        <line>#       ###F     #  #F##</line>
-        <line>##     #####     ##    #</line>
-        <line>##      F#####    ####K#</line>
-        <line>####    ###          ###</line>
-        <line>##     ###          ####</line>
-        <line>###   ##     #       ###</line>
-        <line>##   ###   ###       ###</line>
-        <line>###  ##F  ###     H#####</line>
+        <line>#    #   ###    ##   ###</line>
+        <line>#       ###F    #H  #F##</line>
+        <line>##     #####    ###    #</line>
+        <line>###     F#####    ####K#</line>
+        <line>#####   ###          ###</line>
+        <line>#  H#  ###          ####</line>
+        <line># ### ##     #       ###</line>
+        <line>#     ##   ###       ###</line>
+        <line>##   ##F  ###      #####</line>
         <line>########################</line>
         <link sx="10" sy="7" dx="12" dy="9" />
         <link sx="11" sy="9" dx="9" dy="7" />
-        <link sx="8" sy="11" dx="18" dy="8" />
-        <link sx="21" sy="4" dx="9" dy="7" />
+        <link sx="8" sy="11" dx="21" dy="5" />
+        <link sx="21" sy="4" dx="7" dy="11" />
         <link sx="7" sy="16" nextLevel="1" />
         <link sx="21" sy="9" nextLevel="3" />
     </level>
