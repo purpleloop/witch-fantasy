@@ -177,6 +177,16 @@ public class WitchFantasyView extends BaseGameView {
                 if (paintOverlay) {
                     paintWeather(g2, currentEnv);
                 }
+            } else if (currentSession.isIntermission()) {
+
+                int sx = VIEW_WIDTH / 2;
+                int sy = VIEW_WIDTH / 2;
+
+                String levelTitle = "LEVEL " + currentSession.getTargetLevelId();
+
+                g.setColor(Color.WHITE);
+                g.drawString(levelTitle, sx, sy);
+
             }
 
         } // if currentSession
