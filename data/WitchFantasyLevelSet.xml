@@ -2,22 +2,22 @@
 <levels start="1">
     <level height="18" id="1" width="24" season="SPRING">
         <line>########################</line>
-        <line>#+   ###H       H    ###</line>
-        <line>#     ###             ##</line>
-        <line>##    ##             ###</line>
+        <line>#+   ###H ....  H ...###</line>
+        <line>#     ###  ..      ...##</line>
+        <line>##    ##            .###</line>
         <line>##          ####     ###</line>
         <line>#     ####   ##    #####</line>
         <line>##   ###          H##  #</line>
         <line>##   #C    #    ###   ##</line>
         <line>#   ##   ###     #   ###</line>
-        <line>#       ##            ##</line>
-        <line>##         ##    ##    #</line>
-        <line>###H       ###    #   K#</line>
+        <line>#..     ##            ##</line>
+        <line>##...      ##    ##    #</line>
+        <line>###H.      ###    #   K#</line>
         <line>####   ##            ###</line>
-        <line>##H   ####          ####</line>
-        <line>###    ##     #      ###</line>
-        <line>##   #     ###       ###</line>
-        <line>###  ##H  ###     F#####</line>
+        <line>##H   ####.         ####</line>
+        <line>###    ##.    #      ###</line>
+        <line>##...#     ###       ###</line>
+        <line>###..##H  ###     F#####</line>
         <line>########################</line>
         <link sx="18" sy="16" nextLevel="2" />
     </level>

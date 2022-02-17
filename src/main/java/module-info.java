@@ -5,6 +5,7 @@ module io.github.purpleloop.game.witchfantasy {
 	
 	requires java.xml;
 	requires commons.logging;
+	requires org.apache.commons.lang3;
 	requires org.apache.logging.log4j;
 	requires org.apache.logging.log4j.core;
 	requires org.apache.logging.log4j.jcl;

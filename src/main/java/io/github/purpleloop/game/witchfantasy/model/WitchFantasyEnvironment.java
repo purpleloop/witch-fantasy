@@ -62,6 +62,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
             for (Location houseLocation : housesLocations) {
                 VillagerAgent villagerAgent = spawnVillagerAgentAt(houseLocation);
+                
+                // An agent's spawning house becomes his own.
+                villagerAgent.setHouseLocation(houseLocation);
                 addObject(villagerAgent);
 
             }
@@ -189,12 +192,8 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             switch (cellContents) {
 
             case HOUSE:
-                // The agents change it's target if arrived at the targeted home
-                Location targetLocation = villagerAgent.getTarget();
-                if (targetLocation.equals(x, y)) {
-                    villagerAgent.defineNextTarget();
-                }
-
+            case FIELD:
+                villagerAgent.notifyAtContent(cellContents, x, y);
                 break;
 
             case FOUNTAIN:
