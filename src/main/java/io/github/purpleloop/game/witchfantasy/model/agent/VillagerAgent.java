@@ -33,23 +33,29 @@ public class VillagerAgent extends WitchFantasyAgent {
         LOADED,
 
         /** Village arrived at home. */
-        AT_HOME;
+        AT_HOME,
+
+        /** No more fields. */
+        NO_MORE_FIELD;
     }
 
     /** Possible states for a villager agent. */
     enum VillagerState implements MachineState {
 
         /** The villager returns home. */
-        STATE_GO_TO_HOUSE,
+        GO_TO_HOUSE,
 
         /** The villager harvests in a field for food. */
-        STATE_HARVESTING,
+        HARVESTING,
 
         /** The villager walks towards a field. */
-        STATE_GO_TO_FIELD,
+        GO_TO_FIELD,
 
         /** The villager is resting at home. */
-        STATE_RESTING;
+        RESTING,
+
+        /** The villager is idle (no more fields to harvest). */
+        IDLE;
     }
 
     /** Logger of the class. */
@@ -61,8 +67,8 @@ public class VillagerAgent extends WitchFantasyAgent {
     /** An internal path finder. */
     private PathFinder pathFinder;
 
-    /** The agent's house location. */
-    private Location houseLocation;
+    /** The agent's home location. */
+    private Location homeLocation;
 
     /** A target location where to head for. */
     private Location targetLocation;
@@ -84,18 +90,21 @@ public class VillagerAgent extends WitchFantasyAgent {
         pathFinder = new WitchFantasyPathFinder(witchFantasyEnvironment, this);
 
         automaton = new FiniteStateMachine();
-        automaton.newState(VillagerState.STATE_RESTING);
-        automaton.setInitial(VillagerState.STATE_RESTING);
-        automaton.newState(VillagerState.STATE_GO_TO_FIELD);
-        automaton.newState(VillagerState.STATE_HARVESTING);
-        automaton.newState(VillagerState.STATE_GO_TO_HOUSE);
-        automaton.newTransition(VillagerState.STATE_RESTING, VillagerState.STATE_GO_TO_FIELD,
+        automaton.newState(VillagerState.RESTING);
+        automaton.setInitial(VillagerState.RESTING);
+        automaton.newState(VillagerState.GO_TO_FIELD);
+        automaton.newState(VillagerState.HARVESTING);
+        automaton.newState(VillagerState.GO_TO_HOUSE);
+        automaton.newState(VillagerState.IDLE);
+        automaton.newTransition(VillagerState.RESTING, VillagerState.GO_TO_FIELD,
                 VillagerFacts.HUNGRY);
-        automaton.newTransition(VillagerState.STATE_GO_TO_FIELD, VillagerState.STATE_HARVESTING,
+        automaton.newTransition(VillagerState.GO_TO_FIELD, VillagerState.HARVESTING,
                 VillagerFacts.AT_FIELD);
-        automaton.newTransition(VillagerState.STATE_HARVESTING, VillagerState.STATE_GO_TO_HOUSE,
+        automaton.newTransition(VillagerState.GO_TO_FIELD, VillagerState.IDLE,
+                VillagerFacts.NO_MORE_FIELD);
+        automaton.newTransition(VillagerState.HARVESTING, VillagerState.GO_TO_HOUSE,
                 VillagerFacts.LOADED);
-        automaton.newTransition(VillagerState.STATE_GO_TO_HOUSE, VillagerState.STATE_RESTING,
+        automaton.newTransition(VillagerState.GO_TO_HOUSE, VillagerState.RESTING,
                 VillagerFacts.AT_HOME);
     }
 
@@ -110,8 +119,12 @@ public class VillagerAgent extends WitchFantasyAgent {
 
             FSMNode currentState = automaton.getCurrentNode();
 
+            if (LOG.isDebugEnabled()) {
+                logStatus(currentState);
+            }
+
             switch ((VillagerState) currentState.getState()) {
-            case STATE_RESTING:
+            case RESTING:
 
                 if (foodLevel > 0) {
                     foodLevel--;
@@ -121,40 +134,71 @@ public class VillagerAgent extends WitchFantasyAgent {
 
                 break;
 
-            case STATE_GO_TO_FIELD:
-                targetField();
+            case GO_TO_FIELD:
+
+                // If the agent has no target or targets anything else, set a
+                // field as target.
+                if (targetLocation == null || environment.getCellContents(targetLocation.getX(),
+                        targetLocation.getY()) != WitchFantasyMapContents.FIELD) {
+
+                    boolean targetFound = defineNextTarget(WitchFantasyMapContents.FIELD);
+
+                    if (!targetFound) {
+                        automaton.addFact(VillagerFacts.NO_MORE_FIELD);
+                    }
+
+                }
                 break;
 
-            case STATE_GO_TO_HOUSE:
+            case GO_TO_HOUSE:
                 defineHomeTarget();
                 break;
 
-            case STATE_HARVESTING:
+            case HARVESTING:
                 foodLevel++;
                 if (foodLevel == MAX_LOAD) {
                     automaton.addFact(VillagerFacts.LOADED);
+
+                    ((WitchFantasyEnvironment) environment).exhaustField(getCellLocation());
                 }
 
                 break;
 
+            case IDLE:
+                // Nothing to do
             default:
                 break;
             }
 
             if (targetLocation != null) {
+
                 setOrientation(getOrientationForLocation(targetLocation));
                 setSpeed(environment.getCellSize() / 20);
+            } else {
+                setSpeed(0);
             }
 
         }
     }
 
     /**
+     * Log the villager status.
+     * 
+     * @param currentState the current state
+     */
+    private void logStatus(FSMNode currentState) {
+
+        LOG.debug("Villager " + getId() + " is in " + getCellLocation() + ", with target "
+                + targetLocation + ", in state" + currentState);
+    }
+
+    /**
      * Defines the next target.
      * 
-     * @param the targetContents to head for
+     * @param targetContents the targetContents to head for
+     * @return true if target allocations was successful, false otherwise
      */
-    public void defineNextTarget(WitchFantasyMapContents targetContents) {
+    public boolean defineNextTarget(WitchFantasyMapContents targetContents) {
 
         // Get the list of all possible targets that matches the required
         // content.
@@ -168,21 +212,13 @@ public class VillagerAgent extends WitchFantasyAgent {
             int fieldLocationIndex = random.nextInt(size);
             setTargetLocation(targetLocations.get(fieldLocationIndex), targetContents.name());
 
+            return true;
+
         } else {
             setTargetLocation(null, StringUtils.EMPTY);
+
+            return false;
         }
-    }
-
-    /** Target a field. */
-    public void targetField() {
-
-        // If the agent has no target or targets anything else, set a field as
-        // target.
-        if (targetLocation == null || environment.getCellContents(targetLocation.getX(),
-                targetLocation.getY()) != WitchFantasyMapContents.FIELD) {
-            defineNextTarget(WitchFantasyMapContents.FIELD);
-        }
-
     }
 
     /** Define the villager's home as target. */
@@ -192,7 +228,7 @@ public class VillagerAgent extends WitchFantasyAgent {
         // target.
         if (targetLocation == null || environment.getCellContents(targetLocation.getX(),
                 targetLocation.getY()) != WitchFantasyMapContents.HOUSE) {
-            setTargetLocation(houseLocation, "Villager's home");
+            setTargetLocation(homeLocation, "villager's home");
         }
     }
 
@@ -207,9 +243,9 @@ public class VillagerAgent extends WitchFantasyAgent {
         this.targetLocation = location;
 
         if (location == null) {
-            LOG.debug("No target");
+            LOG.info("Villager " + getId() + " has no target");
         } else {
-            LOG.debug("Target location is " + description + " at " + targetLocation);
+            LOG.info("Villager " + getId() + " target is " + description + " at " + targetLocation);
         }
     }
 
@@ -235,12 +271,12 @@ public class VillagerAgent extends WitchFantasyAgent {
     }
 
     /**
-     * Sets the agent's house.
+     * Sets the agent's home.
      * 
-     * @param houseLocation the location of the agent's house.
+     * @param houseLocation the location of a house.
      */
-    public void setHouseLocation(Location houseLocation) {
-        this.houseLocation = houseLocation;
+    public void setHomeLocation(Location houseLocation) {
+        this.homeLocation = houseLocation;
     }
 
     /**
@@ -252,10 +288,15 @@ public class VillagerAgent extends WitchFantasyAgent {
      */
     public void notifyAtContent(WitchFantasyMapContents cellContents, int x, int y) {
 
-        if (!getTarget().equals(x, y)) {
+        if (targetLocation == null || !targetLocation.equals(x, y)) {
             // This is not a target
             return;
         }
+
+        LOG.info("Villager " + getId() + " reached target " + cellContents + " at "
+                + targetLocation);
+
+        targetLocation = null;
 
         if (cellContents == WitchFantasyMapContents.FIELD) {
             automaton.addFact(VillagerFacts.AT_FIELD);
@@ -265,6 +306,11 @@ public class VillagerAgent extends WitchFantasyAgent {
             automaton.addFact(VillagerFacts.AT_HOME);
         }
 
+    }
+
+    @Override
+    public String getExtraDebugInfo() {
+        return automaton.getCurrentNode().getState().name();
     }
 
 }

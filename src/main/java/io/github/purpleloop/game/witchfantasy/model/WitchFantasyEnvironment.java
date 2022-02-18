@@ -12,6 +12,7 @@ import io.github.purpleloop.game.witchfantasy.WitchFantasyMapContents;
 import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
 import io.github.purpleloop.game.witchfantasy.model.agent.VillagerAgent;
 import io.github.purpleloop.gameengine.action.model.environment.AbstractCellObjectEnvironment;
+import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 import io.github.purpleloop.gameengine.action.model.interfaces.IAgent;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
 import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
@@ -62,9 +63,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
             for (Location houseLocation : housesLocations) {
                 VillagerAgent villagerAgent = spawnVillagerAgentAt(houseLocation);
-                
+
                 // An agent's spawning house becomes his own.
-                villagerAgent.setHouseLocation(houseLocation);
+                villagerAgent.setHomeLocation(houseLocation);
                 addObject(villagerAgent);
 
             }
@@ -125,6 +126,13 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             // No agent can go through a block
             if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
                 return false;
+            }
+
+            if (testedObject instanceof PlayableCharacterAgent) {
+                // Playable agent can't go through a field
+                if (cellContentsCode == WitchFantasyMapContents.FIELD) {
+                    return false;
+                }
             }
 
         }
@@ -193,7 +201,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
             case HOUSE:
             case FIELD:
-                villagerAgent.notifyAtContent(cellContents, x, y);
+                if (!villagerAgent.isBetweenTwoCells()) {
+                    villagerAgent.notifyAtContent(cellContents, x, y);
+                }
                 break;
 
             case FOUNTAIN:
@@ -319,6 +329,25 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
             return Optional.of(weatherModel);
         } else {
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Exhaust field at location.
+     * 
+     * @param location field location
+     */
+    public void exhaustField(Location location) {
+
+        int cx = location.getX();
+        int cy = location.getY();
+        ICellContents content = getCellContents(cx, cy);
+
+        // Remove an exhausted field (Current approximation : subsequent
+        // harvesting are still possible, but only for in place villager agents
+        // that will ignore this removal).
+        if (content == WitchFantasyMapContents.FIELD) {
+            setCellContents(cx, cy, WitchFantasyMapContents.EMPTY);
         }
     }
 

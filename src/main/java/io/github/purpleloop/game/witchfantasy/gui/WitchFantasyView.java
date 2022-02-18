@@ -375,6 +375,9 @@ public class WitchFantasyView extends BaseGameView {
         int yLoc = specificObject.getYLoc();
 
         StringBuilder sb = new StringBuilder();
+        sb.append("#");
+        sb.append(objectToPaint.getId());
+        sb.append(" ");
         sb.append(objectToPaint.getName());
         sb.append(" coords=");
         sb.append(xLoc);
@@ -390,6 +393,12 @@ public class WitchFantasyView extends BaseGameView {
         sb.append(specificObject.getOrientation());
         sb.append(", appearance=");
         sb.append(objectToPaint.getAppearance().getName());
+
+        String extraDebugInfo = objectToPaint.getExtraDebugInfo();
+        if (!extraDebugInfo.isBlank()) {
+            sb.append(", xtra=");
+            sb.append(extraDebugInfo);
+        }
 
         graphics2d.drawString(sb.toString(), x, y);
 

@@ -36,9 +36,9 @@
         <line>###     F#####    ####K#</line>
         <line>#####   ###          ###</line>
         <line>#  H#  ###          ####</line>
-        <line># ### ##     #       ###</line>
-        <line>#     ##   ###       ###</line>
-        <line>##   ##F  ###      #####</line>
+        <line># ### ##     #   ..  ###</line>
+        <line>#     ##   ###.......###</line>
+        <line>##   ##F  ###......#####</line>
         <line>########################</line>
         <link sx="10" sy="7" dx="12" dy="9" />
         <link sx="11" sy="9" dx="9" dy="7" />

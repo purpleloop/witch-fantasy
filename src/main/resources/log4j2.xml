@@ -11,8 +11,8 @@
         </Root>
         
         <Logger name="io.github.purpleloop.commons" level="info" />
-        <Logger name="io.github.purpleloop.gameengine" level="debug" />
-        <Logger name="io.github.purpleloop.game.witchfantasy" level="debug" />
+        <Logger name="io.github.purpleloop.gameengine" level="info" />
+        <Logger name="io.github.purpleloop.game.witchfantasy" level="info" />
 
     </Loggers>
 </Configuration>
