@@ -2,6 +2,7 @@ package io.github.purpleloop.game.witchfantasy.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -20,9 +21,12 @@ import io.github.purpleloop.game.witchfantasy.model.WeatherModel;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyObject;
 import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
+import io.github.purpleloop.game.witchfantasy.model.agent.VillagerAgent;
 import io.github.purpleloop.gameengine.action.gui.BaseGameView;
 import io.github.purpleloop.gameengine.action.gui.GamePanel;
+import io.github.purpleloop.gameengine.action.model.dialog.DialogController;
 import io.github.purpleloop.gameengine.action.model.environment.AbstractObjectEnvironment;
+import io.github.purpleloop.gameengine.action.model.interfaces.IDialogEngine;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
 import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
 import io.github.purpleloop.gameengine.core.config.GameConfig;
@@ -61,6 +65,7 @@ public class WitchFantasyView extends BaseGameView {
     /** Grey color. */
     private static final Color GREY = new Color(50, 50, 50);
 
+
     /** Should we draw collision rectangles ? */
     private boolean drawCollisions = true;
 
@@ -82,6 +87,9 @@ public class WitchFantasyView extends BaseGameView {
     /** Should overlay be painted ? */
     private boolean paintOverlay = true;
 
+    /** The dialog box. */
+    private DialogFrame dialogFrame;
+
     /**
      * Constructor of the view.
      * 
@@ -94,6 +102,7 @@ public class WitchFantasyView extends BaseGameView {
         owner.setBackground(Color.BLACK);
         loadSpritesSource(conf, dataFileProvider);
         registerSprites();
+        dialogFrame = new DialogFrame();
     }
 
     @Override
@@ -106,6 +115,11 @@ public class WitchFantasyView extends BaseGameView {
         for (Sprite desc : getSpritesDescriptions()) {
             registerSprite(desc);
         }
+    }
+
+    @Override
+    protected void registerFonts(Font normalFont) {
+        dialogFrame.setFont(normalFont.deriveFont(Font.BOLD, (float) 24.0));
     }
 
     /** @return all sprites descriptions. */
@@ -177,12 +191,22 @@ public class WitchFantasyView extends BaseGameView {
                 if (paintOverlay) {
                     paintWeather(g2, currentEnv);
                 }
+
+                IDialogEngine dialogEngine = currentSession.getGameEngine().getDialogEngine().get();
+
+                DialogController dialogController = dialogEngine.getDialogController();
+                if (dialogController.hasDialogInProgress()) {
+                    dialogFrame.paintFrame(g2, dialogController);                    
+
+                    g2.setFont(getNormalFont());
+                }
+
             } else if (currentSession.isIntermission()) {
 
                 int sx = VIEW_WIDTH / 2;
                 int sy = VIEW_WIDTH / 2;
 
-                String levelTitle = "LEVEL " + currentSession.getTargetLevelId();
+                String levelTitle = "LEVEL " + currentSession.getTargetLevelId().toUpperCase();
 
                 g.setColor(Color.WHITE);
                 g.drawString(levelTitle, sx, sy);
@@ -191,6 +215,8 @@ public class WitchFantasyView extends BaseGameView {
 
         } // if currentSession
     }
+
+ 
 
     private void paintWeather(Graphics2D g2, WitchFantasyEnvironment currentEnv) {
 
@@ -296,10 +322,16 @@ public class WitchFantasyView extends BaseGameView {
                 objectOrientation = 0;
             }
 
-            putSprite(graphics2d,
-                    objectToPaint.getName() + "-" + objectToPaint.getAppearance().getName()
-                            + objectToPaint.getAnimationSequence() + objectOrientation,
-                    x, y);
+            boolean hideInHome = (objectToPaint instanceof VillagerAgent)
+                    && (((VillagerAgent) objectToPaint).isAtHome());
+
+            if (!hideInHome) {
+
+                putSprite(graphics2d,
+                        objectToPaint.getName() + "-" + objectToPaint.getAppearance().getName()
+                                + objectToPaint.getAnimationSequence() + objectOrientation,
+                        x, y);
+            }
 
             if (isDebugInfo()) {
                 paintDebugInfo(graphics2d, environmentObjects, objectToPaint, x, y);

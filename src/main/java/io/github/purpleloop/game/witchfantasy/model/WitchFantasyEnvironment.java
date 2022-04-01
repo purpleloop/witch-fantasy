@@ -1,5 +1,6 @@
 package io.github.purpleloop.game.witchfantasy.model;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,14 @@ import io.github.purpleloop.gameengine.core.util.Location;
 /** The Witch-Fantasy environment is based on a 2D cell object environment. */
 public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
+    /**
+     * The time to recover between dialogs in seconds. Delays successive dialog
+     * triggers.
+     */
+    private static final int DIALOG_RECOVERY_TIME = 10;
+
     /** Dummy villager name. */
-    private static final String VILLAGER_NAME = "villager";
+    public static final String VILLAGER_NAME = "villager";
 
     /** Logger of the class. */
     private static final Log LOG = LogFactory.getLog(WitchFantasyEnvironment.class);
@@ -43,6 +50,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
     /** The associated season. */
     private Season season;
+
+    /** Minimal instant for the next dialog. */
+    private Instant nextDialogMinimalInstant = Instant.now();
 
     /**
      * Constructor of the environment.
@@ -265,7 +275,7 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
 
         boolean isValidCell = isValidCell(xl, yl) && isObjectAllowedAtCell(agt, xl, yl);
         if (isValidCell) {
-            agt.setName("witch");
+            agt.setName(PlayableCharacterAgent.WITCH_NAME);
             agt.setLoc(xl * cellSize, yl * cellSize);
             agt.setOrientation(Direction4.EAST);
             return agt;
@@ -349,6 +359,24 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
         if (content == WitchFantasyMapContents.FIELD) {
             setCellContents(cx, cy, WitchFantasyMapContents.EMPTY);
         }
+    }
+
+    /** Produce a dialog engagement event when agents meet. */
+    public void agentsMeet() {
+
+        if (nextDialogMinimalInstant.isAfter(Instant.now())) {
+            // Still in delay after a dialog
+            return;
+        }
+
+        LOG.info("Agents meet");
+
+        fireEnvironmentChanged(new WitchFantasyEvent(WitchFantasyEvent.ENGAGE_DIALOG));
+    }
+
+    /** Sets the minimal instant for the next meeting. */
+    public void setNextMinimalMeetInstant() {
+        nextDialogMinimalInstant = Instant.now().plusSeconds(DIALOG_RECOVERY_TIME);
     }
 
 }

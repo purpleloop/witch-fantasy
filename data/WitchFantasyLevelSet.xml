@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<levels start="1">
-    <level height="18" id="1" width="24" season="SPRING">
+<levels start="Village">
+    <level height="18" id="Village" width="24" season="SPRING">
         <line>########################</line>
         <line>#+   ###H ....  H ...###</line>
         <line>#     ###  ..      ...##</line>
@@ -44,7 +44,7 @@
         <link sx="11" sy="9" dx="9" dy="7" />
         <link sx="8" sy="11" dx="21" dy="5" />
         <link sx="21" sy="4" dx="7" dy="11" />
-        <link sx="7" sy="16" nextLevel="1" />
+        <link sx="7" sy="16" nextLevel="Village" />
         <link sx="21" sy="9" nextLevel="3" />
     </level>
     <level height="18" id="3" width="24" season="FALL">
@@ -87,7 +87,7 @@
         <line>##   #     ###       ###</line>
         <line>###  ##   ###     F   ##</line>
         <line>########################</line>
-        <link sx="1" sy="1" nextLevel="1" />
+        <link sx="1" sy="1" nextLevel="Village" />
         <link sx="11" sy="1" dx="13" dy="6" />
         <link sx="18" sy="16" dx="22" dy="2" />
     </level>

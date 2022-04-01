@@ -313,4 +313,13 @@ public class VillagerAgent extends WitchFantasyAgent {
         return automaton.getCurrentNode().getState().name();
     }
 
+    /**
+     * Is he villager resting ?
+     * 
+     * @return true if the villager is in resting state, false otherwise
+     */
+    public boolean isAtHome() {
+        return automaton.getCurrentNode().getState().equals(VillagerState.RESTING);
+    }
+
 }

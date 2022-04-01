@@ -2,6 +2,7 @@ package io.github.purpleloop.game.witchfantasy.model;
 
 import java.awt.Rectangle;
 
+import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
 import io.github.purpleloop.gameengine.action.model.GameTimer;
 import io.github.purpleloop.gameengine.action.model.environment.AbstractCellObjectEnvironment;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
@@ -211,6 +212,20 @@ public class WitchFantasyObject extends GameObject {
     @Override
     public Rectangle getCollisionRectangle() {
         return collisionRectangle;
+    }
+
+    @Override
+    public boolean collides(IEnvironmentObjet other) {
+
+        if (hasName(PlayableCharacterAgent.WITCH_NAME)
+                && other.hasName(WitchFantasyEnvironment.VILLAGER_NAME)) {
+
+            // When the witch meets a villager
+            ((WitchFantasyEnvironment) environment).agentsMeet();
+            return false;
+        }
+        
+        return false;
     }
 
     @Override

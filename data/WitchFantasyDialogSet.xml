@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog-set>
+	<dialog id="1">
+
+		<dialog-node id="start">
+			<text>Hi miss, what are do you doing here ?</text>
+
+			<dialog-choice outcome="2">
+				<text>I'm looking for my cat. Have you seen it ?</text>
+			</dialog-choice>
+
+			<dialog-choice outcome="end">
+				<text>Uh nothing. I'was just walking around. Bye</text>
+			</dialog-choice>
+
+		</dialog-node>
+
+		<dialog-node id="2">
+			<text>Nah, no cat nearby sorry.
+			</text>
+
+			<dialog-choice outcome="end">
+				<text>Bye</text>
+			</dialog-choice>
+
+		</dialog-node>
+
+	</dialog>
+
+	<dialog id="2">
+
+		<dialog-node id="start">
+			<text>Sorry, i'm too busy to talk ...</text>
+
+			<dialog-choice outcome="end">
+				<text>Ok sorry</text>
+			</dialog-choice>
+
+		</dialog-node>
+
+	</dialog>
+
+    <dialog id="3">
+
+        <dialog-node id="start">
+            <text>Do you know secret tunnels are hidden in fountains ?</text>
+
+            <dialog-choice outcome="end">
+                <text>Oh no I didn't, thanks !</text>
+            </dialog-choice>
+
+            <dialog-choice outcome="end">
+                <text>Yep, I found some of them !</text>
+            </dialog-choice>
+
+        </dialog-node>
+
+    </dialog>
+
+</dialog-set>

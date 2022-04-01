@@ -10,7 +10,7 @@ The game goes through seasons
 - winter : snow, fog
 
 Level are 2D environments, with natural boundaries and obstacles.
-Some houses are present, and villagers come and go in the area.
+Some houses are present, and villagers come and go in the area to harvest fields in the surrounding and bring back food to their home.
 
 Fountains can lead to another location of the map, or to other worlds.
 

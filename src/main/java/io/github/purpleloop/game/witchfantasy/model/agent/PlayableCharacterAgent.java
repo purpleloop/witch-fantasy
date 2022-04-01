@@ -16,157 +16,167 @@ import io.github.purpleloop.gameengine.action.model.interfaces.IController;
 import io.github.purpleloop.gameengine.action.model.objects.IAppearance;
 
 /** Models a Witch Fantasy playable (controlled) agent. */
-public class PlayableCharacterAgent extends WitchFantasyAgent implements IControllableAgent, Carrier {
+public class PlayableCharacterAgent extends WitchFantasyAgent
+        implements IControllableAgent, Carrier {
 
-	/** Speed factor : one tenth of cell size - empirical value. */
-	private static final int SPEED_FACTOR = 10;
+    /** Speed factor : one tenth of cell size - empirical value. */
+    private static final int SPEED_FACTOR = 10;
 
-	/** Action to go left. */
-	private static final String ACTION_LEFT = "left";
+    /** Action to go left. */
+    private static final String ACTION_LEFT = "left";
 
-	/** Action to go right. */
-	private static final String ACTION_RIGHT = "right";
+    /** Action to go right. */
+    private static final String ACTION_RIGHT = "right";
 
-	/** Action to go up. */
-	private static final String ACTION_UP = "up";
+    /** Action to go up. */
+    private static final String ACTION_UP = "up";
 
-	/** Action to go down. */
-	private static final String ACTION_DOWN = "down";
+    /** Action to go down. */
+    private static final String ACTION_DOWN = "down";
 
-	/** The associated player. */
-	private WitchFantasyPlayer player;
+    /** Name of the agent. */
+    public static final String WITCH_NAME = "witch";
 
-	/** The controller used by the player to control the agent. */
-	private IController controller;
+    /** The associated player. */
+    private WitchFantasyPlayer player;
 
-	/** The agent's action store (memory of what the agent is going to do). */
-	private SimpleActionStore actionStore;
+    /** The controller used by the player to control the agent. */
+    private IController controller;
 
-	/** The witch appearance. */
-	private WitchAppearance appearance;
+    /** The agent's action store (memory of what the agent is going to do). */
+    private SimpleActionStore actionStore;
 
-	/**
-	 * Creates a playable character agent.
-	 * 
-	 * @param witchFantasyEnvironment the environment in which the agent evolves
-	 * @param player                  the player that controls the agent
-	 */
-	public PlayableCharacterAgent(WitchFantasyEnvironment witchFantasyEnvironment, WitchFantasyPlayer player) {
-		super(witchFantasyEnvironment);
-		this.controller = null;
-		this.actionStore = new SimpleActionStore();
-		this.player = player;
-		this.appearance = WitchAppearance.APPRENTICE;
-	}
+    /** The witch appearance. */
+    private WitchAppearance appearance;
 
-	/** @return the player that controls this agent */
-	public WitchFantasyPlayer getPlayer() {
-		return player;
-	}
+    /**
+     * Creates a playable character agent.
+     * 
+     * @param witchFantasyEnvironment the environment in which the agent evolves
+     * @param player the player that controls the agent
+     */
+    public PlayableCharacterAgent(WitchFantasyEnvironment witchFantasyEnvironment,
+            WitchFantasyPlayer player) {
+        super(witchFantasyEnvironment);
+        this.controller = null;
+        this.actionStore = new SimpleActionStore();
+        this.player = player;
+        this.appearance = WitchAppearance.APPRENTICE;
+    }
 
-	/** @return the controller of the agent */
-	public IController getController() {
-		return controller;
-	}
+    /** @return the player that controls this agent */
+    public WitchFantasyPlayer getPlayer() {
+        return player;
+    }
 
-	/** @return does the agent have a controller */
-	public boolean hasController() {
-		return controller != null;
-	}
+    /** @return the controller of the agent */
+    public IController getController() {
+        return controller;
+    }
 
-	/** @param controller the controller of the agent */
-	public void setController(IController controller) {
-		this.controller = controller;
-	}
+    /** @return does the agent have a controller */
+    public boolean hasController() {
+        return controller != null;
+    }
 
-	@Override
-	public IActionStore getActionStore() {
-		return actionStore;
-	}
+    /** @param controller the controller of the agent */
+    public void setController(IController controller) {
+        this.controller = controller;
+    }
 
-	@Override
-	public void behave() {
+    @Override
+    public IActionStore getActionStore() {
+        return actionStore;
+    }
 
-		Set<String> actions = actionStore.getCurrentActions();
+    @Override
+    public void drainActions() {
+        this.actionStore.forgetAll();
+    }
 
-		Direction newOrientation = determineOrientation(actions);
+    @Override
+    public void behave() {
 
-		if (newOrientation != Direction.NONE) {
-			setOrientation(newOrientation);
-			setSpeed(environment.getCellSize() / SPEED_FACTOR);
-		} else {
-			setSpeed(0);
-		}
+        Set<String> actions = actionStore.getCurrentActions();
 
-	}
+        Direction newOrientation = determineOrientation(actions);
 
-	/**
-	 * Determines the orientation according to the atomic actions.
-	 * 
-	 * @param actionSet the atomic action set
-	 * @return the direction corresponding to actions set
-	 */
-	private Direction determineOrientation(Set<String> actionSet) {
+        if (newOrientation != Direction.NONE) {
+            setOrientation(newOrientation);
+            setSpeed(environment.getCellSize() / SPEED_FACTOR);
+        } else {
+            setSpeed(0);
+        }
 
-		Direction orientation = Direction.NONE;
+    }
 
-		if (actionSet.contains(ACTION_RIGHT)) {
-			orientation = Direction8.EAST;
-		}
-		if (actionSet.contains(ACTION_UP)) {
-			orientation = Direction8.NORTH;
-		}
-		if (actionSet.contains(ACTION_LEFT)) {
-			orientation = Direction8.WEST;
-		}
-		if (actionSet.contains(ACTION_DOWN)) {
-			orientation = Direction8.SOUTH;
-		}
-		if (actionSet.contains(ACTION_RIGHT) && actionSet.contains(ACTION_UP)) {
-			orientation = Direction8.NORTH_EAST;
-		}
-		if (actionSet.contains(ACTION_RIGHT) && actionSet.contains(ACTION_DOWN)) {
-			orientation = Direction8.SOUTH_EAST;
-		}
-		if (actionSet.contains(ACTION_LEFT) && actionSet.contains(ACTION_UP)) {
-			orientation = Direction8.NORTH_WEST;
-		}
-		if (actionSet.contains(ACTION_LEFT) && actionSet.contains(ACTION_DOWN)) {
-			orientation = Direction8.SOUTH_WEST;
-		}
+    /**
+     * Determines the orientation according to the atomic actions.
+     * 
+     * @param actionSet the atomic action set
+     * @return the direction corresponding to actions set
+     */
+    private Direction determineOrientation(Set<String> actionSet) {
 
-		return orientation;
-	}
+        Direction orientation = Direction.NONE;
 
-	@Override
-	public boolean carries(ICellContents object) {
-		return player.carries(object);
-	}
+        if (actionSet.contains(ACTION_RIGHT)) {
+            orientation = Direction8.EAST;
+        }
+        if (actionSet.contains(ACTION_UP)) {
+            orientation = Direction8.NORTH;
+        }
+        if (actionSet.contains(ACTION_LEFT)) {
+            orientation = Direction8.WEST;
+        }
+        if (actionSet.contains(ACTION_DOWN)) {
+            orientation = Direction8.SOUTH;
+        }
+        if (actionSet.contains(ACTION_RIGHT) && actionSet.contains(ACTION_UP)) {
+            orientation = Direction8.NORTH_EAST;
+        }
+        if (actionSet.contains(ACTION_RIGHT) && actionSet.contains(ACTION_DOWN)) {
+            orientation = Direction8.SOUTH_EAST;
+        }
+        if (actionSet.contains(ACTION_LEFT) && actionSet.contains(ACTION_UP)) {
+            orientation = Direction8.NORTH_WEST;
+        }
+        if (actionSet.contains(ACTION_LEFT) && actionSet.contains(ACTION_DOWN)) {
+            orientation = Direction8.SOUTH_WEST;
+        }
 
-	@Override
-	public boolean drop(ICellContents object) {
-		return player.drop(object);
-	}
+        return orientation;
+    }
 
-	@Override
-	public void grab(ICellContents object) {
-		player.grab(object);
-	}
+    @Override
+    public boolean carries(ICellContents object) {
+        return player.carries(object);
+    }
 
-	@Override
-	public Inventory getInventory() {
-		return player.getInventory();
-	}
+    @Override
+    public boolean drop(ICellContents object) {
+        return player.drop(object);
+    }
 
-	/** @return the character appearance */
-	@Override
-	public IAppearance getAppearance() {
-		return appearance;
-	}
+    @Override
+    public void grab(ICellContents object) {
+        player.grab(object);
+    }
 
-	/** @param appearance the character appearance */
-	public void setAppearance(WitchAppearance appearance) {
-		this.appearance = appearance;
-	}
+    @Override
+    public Inventory getInventory() {
+        return player.getInventory();
+    }
+
+    /** @return the character appearance */
+    @Override
+    public IAppearance getAppearance() {
+        return appearance;
+    }
+
+    /** @param appearance the character appearance */
+    public void setAppearance(WitchAppearance appearance) {
+        this.appearance = appearance;
+    }
 
 }
