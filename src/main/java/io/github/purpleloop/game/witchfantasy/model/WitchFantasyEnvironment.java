@@ -1,5 +1,6 @@
 package io.github.purpleloop.game.witchfantasy.model;
 
+import java.io.File;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import io.github.purpleloop.gameengine.action.model.level.IGameLevel;
 import io.github.purpleloop.gameengine.action.model.level.LevelLink;
 import io.github.purpleloop.gameengine.action.model.level.LocatedLevelLink;
 import io.github.purpleloop.gameengine.action.model.level.LocationJump;
+import io.github.purpleloop.gameengine.core.sound.interfaces.MutableSoundEngine;
 import io.github.purpleloop.gameengine.core.util.EngineException;
 import io.github.purpleloop.gameengine.core.util.Location;
 
@@ -62,6 +64,12 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
      */
     public WitchFantasyEnvironment(ISession session, IGameLevel level) throws EngineException {
         super(session, level);
+
+        MutableSoundEngine soundEngine = getGameEngine().getSoundEngine();
+
+        File bgSoundFile = new File(System.getProperty("user.dir")
+                + "/media/music/ForestAmbient-FreeCinematics-77s.ogg");
+        soundEngine.playBackgroundSound(bgSoundFile);
 
         try {
             WitchFantasyAgent witchAgent = spawnControlledAgentIn(getStartLocation(),
@@ -377,6 +385,11 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     /** Sets the minimal instant for the next meeting. */
     public void setNextMinimalMeetInstant() {
         nextDialogMinimalInstant = Instant.now().plusSeconds(DIALOG_RECOVERY_TIME);
+    }
+
+    @Override
+    public void specificCleanUp() {
+        getGameEngine().getSoundEngine().stopBackgroundSound();
     }
 
 }
