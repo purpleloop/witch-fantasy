@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +21,17 @@ import io.github.purpleloop.game.witchfantasy.model.Season;
 import io.github.purpleloop.game.witchfantasy.model.WeatherModel;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyEnvironment;
 import io.github.purpleloop.game.witchfantasy.model.WitchFantasyObject;
+import io.github.purpleloop.game.witchfantasy.model.WitchFantasyPlayer;
 import io.github.purpleloop.game.witchfantasy.model.agent.PlayableCharacterAgent;
 import io.github.purpleloop.game.witchfantasy.model.agent.VillagerAgent;
 import io.github.purpleloop.gameengine.action.gui.BaseGameView;
 import io.github.purpleloop.gameengine.action.gui.GamePanel;
 import io.github.purpleloop.gameengine.action.model.dialog.DialogController;
 import io.github.purpleloop.gameengine.action.model.environment.AbstractObjectEnvironment;
+import io.github.purpleloop.gameengine.action.model.environment.ICellContents;
 import io.github.purpleloop.gameengine.action.model.interfaces.IDialogEngine;
 import io.github.purpleloop.gameengine.action.model.interfaces.IEnvironmentObjet;
+import io.github.purpleloop.gameengine.action.model.interfaces.IPlayer;
 import io.github.purpleloop.gameengine.action.model.interfaces.ISession;
 import io.github.purpleloop.gameengine.core.config.GameConfig;
 import io.github.purpleloop.gameengine.core.config.IDataFileProvider;
@@ -63,8 +67,22 @@ public class WitchFantasyView extends BaseGameView {
     private static final int VIEW_HEIGHT = UG * VIEWABLE_CELLS_HEIGHT;
 
     /** Grey color. */
-    private static final Color GREY = new Color(50, 50, 50);
+    private static final Color LIGHT_GREY = new Color(250, 250, 250);
 
+    /** X start location of the player status area. */
+    private static final int PLAYER_STATUS_START_X = 0;
+
+    /** Y start location of the player status area. */
+    private static final int PLAYER_STATUS_START_Y = VIEW_HEIGHT;
+
+    /** Height of the player status area. */
+    private static final int STATUS_HEIGHT = 150;
+
+    /** The font for player status panel. */
+    private Font playerStatusFont;
+
+    /** A font for titles. */
+    private Font titleFont;
 
     /** Should we draw collision rectangles ? */
     private boolean drawCollisions = true;
@@ -107,7 +125,7 @@ public class WitchFantasyView extends BaseGameView {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(VIEW_WIDTH, VIEW_HEIGHT);
+        return new Dimension(VIEW_WIDTH, VIEW_HEIGHT + STATUS_HEIGHT);
     }
 
     /** Register the sprites. */
@@ -119,7 +137,9 @@ public class WitchFantasyView extends BaseGameView {
 
     @Override
     protected void registerFonts(Font normalFont) {
+        titleFont = normalFont.deriveFont(Font.BOLD, (float) 36.0);
         dialogFrame.setFont(normalFont.deriveFont(Font.BOLD, (float) 24.0));
+        playerStatusFont = normalFont.deriveFont(Font.BOLD, (float) 18.0);
     }
 
     /** @return all sprites descriptions. */
@@ -192,21 +212,27 @@ public class WitchFantasyView extends BaseGameView {
                     paintWeather(g2, currentEnv);
                 }
 
+                paintPlayerStatus(g2);
+
                 IDialogEngine dialogEngine = currentSession.getGameEngine().getDialogEngine().get();
 
                 DialogController dialogController = dialogEngine.getDialogController();
                 if (dialogController.hasDialogInProgress()) {
-                    dialogFrame.paintFrame(g2, dialogController);                    
+                    dialogFrame.paintFrame(g2, dialogController);
 
                     g2.setFont(getNormalFont());
                 }
 
             } else if (currentSession.isIntermission()) {
 
-                int sx = VIEW_WIDTH / 2;
-                int sy = VIEW_WIDTH / 2;
+                g2.setFont(titleFont);
+                
+                String levelTitle = currentSession.getTargetLevelId().toUpperCase();
+                Rectangle2D titleBounds = titleFont.getStringBounds(levelTitle,
+                        g2.getFontRenderContext());
 
-                String levelTitle = "LEVEL " + currentSession.getTargetLevelId().toUpperCase();
+                int sx = (int) ((VIEW_WIDTH - titleBounds.getWidth()) / 2);
+                int sy = (int) ((VIEW_WIDTH - titleBounds.getHeight()) / 2);
 
                 g.setColor(Color.WHITE);
                 g.drawString(levelTitle, sx, sy);
@@ -215,8 +241,6 @@ public class WitchFantasyView extends BaseGameView {
 
         } // if currentSession
     }
-
- 
 
     private void paintWeather(Graphics2D g2, WitchFantasyEnvironment currentEnv) {
 
@@ -271,7 +295,9 @@ public class WitchFantasyView extends BaseGameView {
      * @param g graphic context
      */
     private void paintWaitPage(Graphics g) {
-        g.setColor(GREY);
+
+        g.setColor(LIGHT_GREY);
+        g.drawString("Welcome to Witch Fantasy", 50, 20);
         super.listControls(g);
     }
 
@@ -376,6 +402,44 @@ public class WitchFantasyView extends BaseGameView {
             }
         }
 
+    }
+
+    /**
+     * Paints the player status on the graphic context.
+     * 
+     * @param g2 the graphic context
+     */
+    private void paintPlayerStatus(Graphics g2) {
+
+        g2.setFont(playerStatusFont);
+
+        g2.setColor(Color.BLACK);
+        g2.fillRect(PLAYER_STATUS_START_X, PLAYER_STATUS_START_Y, VIEW_WIDTH, 150);
+
+        int ox = PLAYER_STATUS_START_X + 10;
+        int oy = PLAYER_STATUS_START_Y + 10;
+
+        for (IPlayer rawPlayer : getCurrentSession().getPlayers()) {
+
+            WitchFantasyPlayer player = (WitchFantasyPlayer) rawPlayer;
+
+            g2.setColor(LIGHT_GREY);
+
+            g2.drawString(player.getName(), ox, oy + 20);
+            g2.drawString("Score " + player.getScore(), ox, oy + 60);
+            g2.drawString("Hope " + player.getHope(), ox + 100, oy + 60);
+
+            int xOffset = ox;
+            for (ICellContents inventoryObject : player.getInventory().getContents()) {
+                putSprite(g2,
+                        CONTENTS_SPRITE_PREFIX
+                                + ((WitchFantasyMapContents) inventoryObject).ordinal(),
+                        xOffset, oy + 100);
+                xOffset += UG;
+            }
+
+            ox += 200;
+        }
     }
 
     /**

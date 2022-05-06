@@ -19,9 +19,9 @@
         <line>##...#     ###       ###</line>
         <line>###..##H  ###     F#####</line>
         <line>########################</line>
-        <link sx="18" sy="16" nextLevel="2" />
+        <link sx="18" sy="16" nextLevel="Woods" />
     </level>
-    <level height="18" id="2" width="24" season="SUMMER">
+    <level height="18" id="Woods" width="24" season="SUMMER">
         <line>########################</line>
         <line>#+  #######C   ## H  ###</line>
         <line>#    ####     ##      ##</line>
@@ -45,9 +45,9 @@
         <link sx="8" sy="11" dx="21" dy="5" />
         <link sx="21" sy="4" dx="7" dy="11" />
         <link sx="7" sy="16" nextLevel="Village" />
-        <link sx="21" sy="9" nextLevel="3" />
+        <link sx="21" sy="9" nextLevel="Caves" />
     </level>
-    <level height="18" id="3" width="24" season="FALL">
+    <level height="18" id="Caves" width="24" season="FALL">
         <line>########################</line>
         <line>#+   ### ##  #####     #</line>
         <line># # ###   #  #####  ## #</line>
@@ -66,9 +66,9 @@
         <line># ####   ########### # #</line>
         <line>#                    #F#</line>
         <line>########################</line>
-        <link sx="22" sy="16" nextLevel="4" />
+        <link sx="22" sy="16" nextLevel="Icy land" />
     </level>    
-    <level height="18" id="4" width="24" season="WINTER">
+    <level height="18" id="Icy land" width="24" season="WINTER">
         <line>########################</line>
         <line>#F#     ###F       K####</line>
         <line># #     ##             #</line>
