@@ -385,7 +385,7 @@ public class WitchFantasyView extends BaseGameView {
                 int xl = (x * UG) - viewX;
                 int yl = (y * UG) - viewY;
 
-                if (isInView(xl, yl)) {
+                if (isInView(xl, yl) && currentEnv.isRevealed(x, y)) {
 
                     // Background is always seasonal
                     putSprite(graphics, CONTENTS_SPRITE_PREFIX + "0" + seasonName, xl, yl);

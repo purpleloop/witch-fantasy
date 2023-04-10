@@ -56,6 +56,9 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     /** Minimal instant for the next dialog. */
     private Instant nextDialogMinimalInstant = Instant.now();
 
+    /** Fog associated to the environment. */
+    private Fog fog;
+
     /**
      * Constructor of the environment.
      * 
@@ -64,6 +67,8 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
      */
     public WitchFantasyEnvironment(ISession session, IGameLevel level) throws EngineException {
         super(session, level);
+
+        fog = new Fog(this);
 
         MutableSoundEngine soundEngine = getGameEngine().getSoundEngine();
 
@@ -165,6 +170,8 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
         WitchFantasyMapContents cellContents = (WitchFantasyMapContents) getCellContents(x, y);
 
         if (object instanceof PlayableCharacterAgent) {
+
+            fog.revealNeighborHood(x, y);
 
             PlayableCharacterAgent playableCharacterAgent = (PlayableCharacterAgent) object;
 
@@ -393,6 +400,15 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
     @Override
     public void specificCleanUp() {
         getGameEngine().getSoundEngine().stopBackgroundSound();
+    }
+
+    /**
+     * @param x abscissa of the cell
+     * @param y ordinate of the cell
+     * @return true if the fog is revealed, false otherwise
+     */
+    public boolean isRevealed(int x, int y) {
+        return fog.isRevealed(x, y);
     }
 
 }
