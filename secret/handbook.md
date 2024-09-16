@@ -15,19 +15,23 @@ The four witches of the Furnace Circle were summoned by the king at Kilara. They
 
 The witches opposed against the dark wizard and almost stopped him. In desperate try to regain the upper hand, the wizard activated the artifact. The artifact suddenly shattered into several parts ant the despair magic spread around all the tower. Witches were directly exposed to the source of despair magic.
 
-The witches did not succomb, relying on their hope magic but they were severely affected. As the dark wizard was nowhere to be found, the witches return back to Kilara with the remaining parts of the artifact.The witches entered Kilara's castle where the parts of the artifact where sealed by a set of runes in a chest in the dungeon.
+The witches did not succumb, relying on their hope magic but they were severely affected. As the dark wizard was nowhere to be found, the witches return back to Kilara with the remaining parts of the artifact.The witches entered Kilara's castle where the parts of the artifact where sealed by a set of runes in a chest in the dungeon.
 
 The witches retired separately in the woods to slowly recover by the blessings of nature.
 
-## The four witches of the Frunace Circle
+# Characters
 
+## The four witches of the Frunace Circle
 
 * Becha plenae lunae
 * Altum Mare Lori
-* Magna quercu Maya : retired in the forest
+* Magna quercu alba Maya : retired in the forest
 * Xethane de Ventis Fair
 
-# Characters
+Maya takes her name from a big 800 year aged white oak tree.
+
+Lori is a middle aged witch, five feet tall, with long and curly red hairs. She has deep green eyes. She usually wears a large white bodice, a brown leather corset and a black fitted pants with old, high-waisted brown boots. She also wears a large belt and a big leather tricorn. She is the youngest, most rebellious and most unpredictable of the four witches. Her apparent roughness and bad tamper mask a great heart and an unquenchable internal fire. She is the fierce a the captain of a mixed troop composed of semi-orcish buccaneer, dwarf cook that compose the crew of a old three-masted ship. She takes her power from the peaceful and calm seas but can rely on the strengths of the deep ocean waters when required.
+
 
 ## Characteristics
 
