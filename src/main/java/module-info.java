@@ -1,10 +1,12 @@
 module io.github.purpleloop.game.witchfantasy {
 	
+    exports io.github.purpleloop.game.witchfantasy to io.github.purpleloop.commons;
 	exports io.github.purpleloop.game.witchfantasy.gui to io.github.purpleloop.commons;
 	exports io.github.purpleloop.game.witchfantasy.model to io.github.purpleloop.commons, io.github.purpleloop.gameengine.action;
+	exports io.github.purpleloop.game.witchfantasy.model.agent to io.github.purpleloop.commons, io.github.purpleloop.gameengine.action;
 	
 	requires java.xml;
-	requires commons.logging;
+	requires org.apache.commons.logging;
 	requires org.apache.commons.lang3;
 	requires org.apache.logging.log4j;
 	requires org.apache.logging.log4j.core;
