@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<levels start="Village">
+<levels start="Home">
+    <level height="8" id="Home" width="10" season="SPRING">
+        <line>WWWWWWWWWW</line>
+        <line>W+       W</line>
+        <line>W        W</line>
+        <line>WW       W</line>
+        <line>WW      WW</line>
+        <line>W        W</line>
+        <line>WW      DW</line>
+        <line>WWWWWWWWWW</line>
+        <link sx="8" sy="6" nextLevel="Village" />
+    </level>
     <level height="18" id="Village" width="24" season="SPRING">
         <line>########################</line>
-        <line>#+   ###H ....  H ...###</line>
-        <line>#     ###  ..      ...##</line>
+        <line>#H   ###H ....  H ...###</line>
+        <line>#+    ###  ..      ...##</line>
         <line>##    ##            .###</line>
         <line>##          ####     ###</line>
         <line>#     ####   ##    #####</line>
@@ -19,6 +30,7 @@
         <line>##...#     ###       ###</line>
         <line>###..##H  ###     F#####</line>
         <line>########################</line>
+        <link sx="1" sy="1" nextLevel="Home" />
         <link sx="18" sy="16" nextLevel="Woods" />
     </level>
     <level height="18" id="Woods" width="24" season="SUMMER">

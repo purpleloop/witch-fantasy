@@ -29,6 +29,12 @@ public enum WitchFantasyMapContents implements ICellContents {
     /** A field. */
     FIELD('.', false),
 
+    /** The walls of interiors. */
+    WALL('W', false),
+
+    /** A door for interiors. */
+    DOOR('D', false),
+
     /** The start place where to . */
     START_PLACE('+', false);
 

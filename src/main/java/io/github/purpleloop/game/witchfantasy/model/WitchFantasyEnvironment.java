@@ -142,7 +142,8 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
         if (testedObject instanceof IAgent) {
 
             // No agent can go through a block
-            if (cellContentsCode == WitchFantasyMapContents.BLOCK) {
+            if (cellContentsCode == WitchFantasyMapContents.BLOCK
+                    || cellContentsCode == WitchFantasyMapContents.WALL) {
                 return false;
             }
 
@@ -195,10 +196,12 @@ public class WitchFantasyEnvironment extends AbstractCellObjectEnvironment {
                 setCellContents(x, y, WitchFantasyMapContents.EMPTY);
                 break;
 
+            case DOOR:
+            case HOUSE:
             case FOUNTAIN:
-                // The agent reached a fountain
+                // The agent reached a gate (door, house, fountain)
 
-                LOG.debug("Reaching a fountain in (" + x + "," + y + ") ... applying links");
+                LOG.debug("Reaching a gate in (" + x + "," + y + ") ... applying links");
 
                 for (LevelLink link : getLevel().getLinks()) {
                     LocatedLevelLink abstractLocatedLevelLink = (LocatedLevelLink) link;
