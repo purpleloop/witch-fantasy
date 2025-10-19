@@ -116,7 +116,7 @@ public class WitchFantasyView extends BaseGameView {
      * @param owner the owning game panel
      */
     public WitchFantasyView(GameConfig conf, IDataFileProvider dataFileProvider, GamePanel owner) {
-        super(owner, conf);
+        super(conf, dataFileProvider, owner);
         owner.setBackground(Color.BLACK);
         loadSpritesSource(conf, dataFileProvider);
         registerSprites();
@@ -226,7 +226,7 @@ public class WitchFantasyView extends BaseGameView {
             } else if (currentSession.isIntermission()) {
 
                 g2.setFont(titleFont);
-                
+
                 String levelTitle = currentSession.getTargetLevelId().toUpperCase();
                 Rectangle2D titleBounds = titleFont.getStringBounds(levelTitle,
                         g2.getFontRenderContext());
@@ -294,7 +294,8 @@ public class WitchFantasyView extends BaseGameView {
      * 
      * @param g graphic context
      */
-    private void paintWaitPage(Graphics g) {
+    @Override
+    protected void paintWaitPage(Graphics g) {
 
         g.setColor(LIGHT_GREY);
         g.drawString("Welcome to Witch Fantasy", 50, 20);
