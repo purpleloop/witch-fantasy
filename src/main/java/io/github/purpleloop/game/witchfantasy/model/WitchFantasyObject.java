@@ -13,14 +13,14 @@ import io.github.purpleloop.gameengine.core.util.Location;
 /** Models an object of the Witch Fantasy world. */
 public class WitchFantasyObject extends GameObject {
 
+    /** Animation delay in milliseconds. */
+    private static final int ANIMATION_DELAY = 500;
+
     /** The objet's environment. */
     protected AbstractCellObjectEnvironment environment;
 
     /** The object speed. */
     private int speed;
-
-    /** Animation delay in milliseconds. */
-    private static final int ANIMATION_DELAY = 500;
 
     /** Index in the animation. */
     private int animationSequence;
